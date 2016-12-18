@@ -1,0 +1,4 @@
+f :: (a -> a) -> a -> a
+f = \f -> \z -> f z
+
+main = print $ f (+3) 7
