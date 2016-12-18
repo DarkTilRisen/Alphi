@@ -1,9 +1,7 @@
 module Main where
-import Control.Applicative (Alternative(..))
-import Control.Monad
-import Base
-import Data
-import NumericParsers
-import Util
+import Parser.Base
+import Parser.NumericParser
 
-main =  print $ parse (parseNumberExp) "he"
+main =  do { x <- readFile "voorbeeld.txt";
+              putStrLn (show $ parse parseNumberExp x);
+            }

@@ -1,8 +1,9 @@
-module Base where
+module Parser.Base where
 import Control.Applicative (Alternative(..))
 import Control.Monad
-import Data
+import Data.Base
 import Data.List
+--import Parser.NumericParsers (parseNumericExp)
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -43,8 +44,6 @@ option p q = Parser $ \s -> case apply p s of
 showParse :: (Show a) => Parser a -> String -> String
 showParse m s = concat . intersperse ", " . map show $ apply m s
 
-
-
 parse :: Parser a -> String -> [(a, String)]
 parse m s = [ (x,t) | (x,t) <- apply m s, t == "" ]
 
@@ -55,3 +54,7 @@ parseResult p s= one $ parse p s
   one []                 = error noParse
   one [x]                = fst x
   one _                  = error ambiguousParse
+
+
+--parserAll :: Parser Statement
+--parserAll = parseNumberExp

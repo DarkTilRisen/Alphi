@@ -1,8 +1,8 @@
-module Util where
-import Base
-import Data
+module Parser.Util where
 import Control.Applicative (Alternative(..))
 import Control.Monad
+import Parser.Base
+import Data.Base
 import Data.Char
 
 

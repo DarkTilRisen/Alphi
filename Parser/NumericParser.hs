@@ -1,10 +1,10 @@
-module NumericParsers (parseNumberExp) where
+module Parser.NumericParser (parseNumberExp) where
 import Control.Applicative (Alternative(..))
 import Control.Monad
-import Base
+import Parser.Base
 import Data.Char
-import Util
-import Data
+import Parser.Util
+import Data.Base
 
 --parses a series of digits
 parseDigits :: Parser String
@@ -36,4 +36,5 @@ parseNumberAbstractExp :: Parser NumericExp -> [[(String, NumericBinaryOp)]] -> 
 parseNumberAbstractExp = foldl chainExp
 
 parseNumberExp :: Parser NumericExp
-parseNumberExp = parseNumberAbstractExp (parseNumLiteral <|> parseParens parseNumberExp) orderBNumOp
+parseNumberExp = parseNumberAbstractExp base orderBNumOp
+                    where base =  parseNumLiteral <|> parseParens parseNumberExp

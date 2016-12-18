@@ -1,4 +1,4 @@
-module Data where
+module Data.Base where
 
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
@@ -41,7 +41,7 @@ false          = "False" -- eq false
 --binary operators
 add            = "ADD"
 sub            = "SUB"
-mult           = "MULT"
+mult           = "MUL"
 divide         = "DIV"
 modulo         = "MOD"
 
