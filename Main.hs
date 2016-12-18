@@ -1,7 +1,7 @@
 module Main where
 import Parser.Base
 import Parser.NumericParser
+import Parser.BoolParser
+import Data.Base
 
-main =  do { x <- readFile "voorbeeld.txt";
-              putStrLn (show $ parse parseNumberExp x);
-            }
+main =  print $  parse (parseNumberExp) "444ADD 444";

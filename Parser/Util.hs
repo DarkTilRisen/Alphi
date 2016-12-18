@@ -54,6 +54,17 @@ matchStr = parseTrailingSpace . parseString
 
 parseParens :: Parser a -> Parser a
 parseParens p = do {matchStr parOpen ; x <- p ;matchStr parClosed; return x }
+
+createLit :: Parser a -> (b -> c) -> b -> Parser c
+createLit p cons arg = (>>) p $ (return . cons) arg
+
+createLit' :: String -> (a -> b) -> a -> Parser b
+createLit'  = createLit . matchStr
+
+parseFromTuple :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
+parseFromTuple f xs  = foldl1 mplus $ fmap f xs
+
+
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl1 p op = do {a <- p; rest a}
   where rest a = do {f <- op;b <- p;rest (f a b)} `mplus` return a

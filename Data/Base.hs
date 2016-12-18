@@ -26,28 +26,48 @@ data Statement       =  ExpB BooleanExpr
 
 
 
--- Tokens --
-parOpen        = "OPEN"  -- eq (
-parClosed      = "CLOSE" -- eq )
-bracketsOpen   = "START" -- eq {
-bracketsClosed = "END" -- eq }
-assign         = "IS"    -- eq =
-floatSep       = "POINT" -- eq .
-true           = "True"  -- eq true
-false          = "False" -- eq false
+-- keywords --
+parOpen             = "OPEN"  -- eq (     --
+parClosed           = "CLOSE" -- eq )     --
+bracketsOpen        = "START" -- eq {     --
+bracketsClosed      = "END"   -- eq }     --
+assign              = "IS"    -- eq =     --
+floatSep            = "POINT" -- eq .     --
+true                = "TRUE"  -- eq true  --
+false               = "FALSE" -- eq false --
+while               = "WHILE"
+if'                 = "IF"
 
---unary operators
+-- unary numeric operators --
 
---binary operators
-add            = "ADD"
-sub            = "SUB"
-mult           = "MUL"
-divide         = "DIV"
-modulo         = "MOD"
+-- binary numeric operators --
+add                 = "ADD"
+sub                 = "SUB"
+mul                 = "MUL"
+div'                = "DIV"
+mod'                = "MOD"
 
---order of operations
---orderUNumOp = []
-orderBNumOp = [[(mult, Mul), (divide, Div), (modulo, Mod)], [(add, Add), (sub, Sub)]]
+-- unary boolean operators --
+not'                = "NOT"
+
+-- binary boolean operators --
+and'                = "AND"
+or'                 = "OR"
+gt                  = "GT"
+lt                  = "LT"
+eq                  = "EQ"
+
+--data Hierarchy a = Const Hierarchy 
+--order of operations --
+orderBNumOp         =  [[(mul,  Mul),
+                         (div', Div),
+                         (mod', Mod)],
+                        [(add, Add),
+                         (sub, Sub)]]
+
+uBoolOp             = [(not', Not)]
+binaryBoolOp        = [(and', And), (or', Or)]
+binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
 
 
 --errors--

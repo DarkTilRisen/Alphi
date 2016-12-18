@@ -23,13 +23,16 @@ parseDouble = do { x <- parseDigits; parseString floatSep;
 
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
-parseNumLiteral = parseTrailingSpace $ parseLit LitInteger parseInt <|> parseLit LitDouble parseDouble
-                  where parseLit cons f = (<|>) (f >>= return . cons) (token '-' >>  f >>= return . cons . (0-))
+parseNumLiteral = parseLit LitInteger parseInt <|> parseLit LitDouble parseDouble
+                  where parseLit cons f = (<|>) (f >>= return . cons) (token '-' >>  f >>= return . cons . (0-))-
+
+
+                     --
 
 -- easyfy order of expressions
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
 chainExp acc xs = chainl1 acc $ foldl1 mplus $ fmap f xs
-                    where f (s, cons) = matchStr s >> (return . BinaryNumericOp) cons
+                    where f (s, cons) = createLit' s BinaryNumericOp cons--matchStr s >> (return . BinaryNumericOp) cons
 
 
 parseNumberAbstractExp :: Parser NumericExp -> [[(String, NumericBinaryOp)]] -> Parser NumericExp
