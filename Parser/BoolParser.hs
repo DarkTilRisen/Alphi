@@ -10,9 +10,9 @@ import Data.Base
 
 parseBoolExp :: Parser BooleanExpr
 parseBoolExp = (parseLitBool
-            `mplus` (parseUOPBool uBoolOp)) --chainl1 (parseBinOPBool binaryBoolOp)
-          --  <|> (parseBinOPBool binaryBoolOp)
-            `mplus` (parseAltBinOPBool binaryAltBoolOp)
+            <|> (parseUOPBool uBoolOp)
+            <|> (parseAltBinOPBool binaryAltBoolOp))
+            `chainl1` (parseBinOPBool binaryBoolOp)
 
 
 parseLitBool :: Parser BooleanExpr
@@ -26,10 +26,7 @@ parseU (s, cons) = do { matchStr s;
 
 parseBinOPBool :: [(String, BinaryBoolOp)] -> Parser (BooleanExpr -> BooleanExpr -> BooleanExpr)
 parseBinOPBool     = parseFromTuple parseBin
-parseBin (s, cons) = do { x <- parseBoolExp;
-                          matchStr s;
-                          y <- parseBoolExp;
-                          return (BinaryBoolOp cons) ;}
+parseBin (s, cons) = createLit' s BinaryBoolOp cons
 
 parseAltBinOPBool :: [(String, BinaryAltBoolOp)] -> Parser BooleanExpr --(NumericExp -> NumericExp -> BooleanExpr)
 parseAltBinOPBool     = parseFromTuple parseAltBin
