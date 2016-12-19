@@ -18,21 +18,19 @@ parseInt = do { x <- parseDigits;
 --parses an Float
 parseDouble :: Parser Double
 parseDouble = do { x <- parseDigits; parseString floatSep;
-                   y <- parseDigits ;
+                   y <- parseDigits;
                    return $ (read (x ++ "." ++ y) :: Double)}
 
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
-parseNumLiteral = parseTrailingSpace $ parseLit LitInteger parseInt <|> parseLit LitDouble parseDouble
-                  where parseLit cons f = (<|>) (f >>= return . cons) (token '-' >>  f >>= return . cons . (0-))
+parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt <|> fmap LitDouble parseDouble
+                  where parseLit c f = (f >>= return . c) `mplus` (token '-' >>  f >>= return . c . (0-))
 
-
-                     --
 
 -- easyfy order of expressions
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
-chainExp acc xs = chainl1 acc $ parseFromTuple f xs
-                    where f (s, cons) = createLit' s BinaryNumericOp cons--matchStr s >> (return . BinaryNumericOp) cons
+chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
+                    where f (s, cons) = createP1' s BinaryNumericOp cons--matchStr s >> (return . BinaryNumericOp) cons
 
 
 parseNumberAbstractExp :: Parser NumericExp -> [[(String, NumericBinaryOp)]] -> Parser NumericExp

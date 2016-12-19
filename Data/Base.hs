@@ -1,8 +1,8 @@
 module Data.Base where
 
+
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
-                        | UnaryNumericOp  NumericBinaryOp NumericExp
                         | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
                         deriving (Show, Eq)
 
@@ -14,17 +14,24 @@ data BooleanExpr     =   LitBool      Bool
                        | BinaryAltBoolOp BinaryAltBoolOp NumericExp NumericExp
                        deriving (Show, Eq)
 
+
+data Exp = BExpr BooleanExpr | NExpr NumericExp deriving (Show, Eq)
+
 data UnaryBoolOp     = Not deriving (Show, Eq)
 data BinaryBoolOp    = And | Or deriving (Show, Eq)
 data BinaryAltBoolOp = GreaterThan | SmallerThan | Equals deriving (Show, Eq)
 
-data Statement       =  ExpB BooleanExpr
-                      | ExpN NumericExp
+
+data Statement       =  Var String Exp
                       | Statements Statement Statement
                       | If BooleanExpr Statement
                       | While BooleanExpr Statement deriving (Show, Eq)
 
 
+
+data Type = Numb
+--data Var a =
+type TypeMapping = [(String, Type)]
 
 -- keywords --
 parOpen             = "OPEN"  -- eq (     --
@@ -57,7 +64,7 @@ gt                  = "GT"
 lt                  = "LT"
 eq                  = "EQ"
 
---data Hierarchy a = Const Hierarchy 
+--data Hierarchy a = Const Hierarchy
 --order of operations --
 orderBNumOp         =  [[(mul,  Mul),
                          (div', Div),
@@ -68,6 +75,7 @@ orderBNumOp         =  [[(mul,  Mul),
 uBoolOp             = [(not', Not)]
 binaryBoolOp        = [(and', And), (or', Or)]
 binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
+
 
 
 --errors--

@@ -53,16 +53,38 @@ matchStr :: String -> Parser String
 matchStr = parseTrailingSpace . parseString
 
 parseParens :: Parser a -> Parser a
-parseParens p = do {matchStr parOpen ; x <- p ;matchStr parClosed; return x }
+parseParens p   = do {matchStr parOpen ; x <- p; matchStr parClosed; return x }
 
-createLit :: Parser a -> (b -> c) -> b -> Parser c
-createLit p cons arg = (>>) p $ (return . cons) arg
+parseBrackets :: Parser a -> Parser a
+parseBrackets p = do {matchStr bracketsOpen ; x <- p; matchStr bracketsClosed; return x }
 
-createLit' :: String -> (a -> b) -> a -> Parser b
-createLit'  = createLit . matchStr
 
-parseFromTuple :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
-parseFromTuple f xs  = foldl1 mplus $ fmap f xs
+createP :: Parser a -> b -> Parser b
+createP p c = p >> (return c)
+
+createP1 :: Parser a -> (b -> c) -> b -> Parser c
+createP1 p c a1 = p >> (return . c) a1
+
+createP2 :: Parser a -> (b  -> c  -> d) -> b -> c -> Parser d
+createP2 p c a1 a2 = p >> (return . c a1) a2
+
+createP' :: String ->  b -> Parser b
+createP'  = createP . matchStr
+
+createP1' :: String -> (a -> b) -> a -> Parser b
+createP1' = createP1 . matchStr
+
+createP2' :: String -> (b  -> c  -> d) -> b -> c -> Parser d
+createP2' = createP2 . matchStr
+
+--createP'' :: Parser a -> (b -> c) -> Parser c
+
+--- hahaha this is just an fmap you silly boy
+createP'' c p = p >>= (return . c)
+
+
+parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
+parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
 
 
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a

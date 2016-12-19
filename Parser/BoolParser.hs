@@ -16,20 +16,20 @@ parseBoolExp = (parseLitBool
 
 
 parseLitBool :: Parser BooleanExpr
-parseLitBool = createLit' true LitBool True `mplus` createLit' false LitBool False
+parseLitBool = createP1' true LitBool True `mplus` createP1' false LitBool False
 
 parseUOPBool :: [(String,  UnaryBoolOp)] -> Parser BooleanExpr
-parseUOPBool     = parseFromTuple parseU
+parseUOPBool     = parseFromTuple' parseU
 parseU (s, cons) = do { matchStr s;
-                              x <- parseBoolExp;
+                              x <- (parseParens parseBoolExp) `mplus` parseLitBool ;
                               (return . UnaryBoolOp cons) x;}
 
 parseBinOPBool :: [(String, BinaryBoolOp)] -> Parser (BooleanExpr -> BooleanExpr -> BooleanExpr)
-parseBinOPBool     = parseFromTuple parseBin
-parseBin (s, cons) = createLit' s BinaryBoolOp cons
+parseBinOPBool     = parseFromTuple' parseBin
+parseBin (s, cons) = createP1' s BinaryBoolOp cons
 
-parseAltBinOPBool :: [(String, BinaryAltBoolOp)] -> Parser BooleanExpr --(NumericExp -> NumericExp -> BooleanExpr)
-parseAltBinOPBool     = parseFromTuple parseAltBin
+parseAltBinOPBool :: [(String, BinaryAltBoolOp)] -> Parser BooleanExpr
+parseAltBinOPBool     = parseFromTuple' parseAltBin
 parseAltBin (s, cons) = do {x <- parseNumberExp;
                             matchStr s;
                             y <- parseNumberExp;

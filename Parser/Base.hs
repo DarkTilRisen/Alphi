@@ -10,7 +10,7 @@ newtype Parser a = Parser (String -> [(a, String)])
 -- functor of a parser
 instance Functor Parser where
   fmap = liftM
-
+  
 -- Applicative of a parser
 instance Applicative Parser where
   pure   = return
@@ -54,7 +54,3 @@ parseResult p s= one $ parse p s
   one []                 = error noParse
   one [x]                = fst x
   one _                  = error ambiguousParse
-
-
---parserAll :: Parser Statement
---parserAll = parseNumberExp

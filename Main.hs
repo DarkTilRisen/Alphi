@@ -5,5 +5,6 @@ import Parser.Base
 import Parser.NumericParser
 import Parser.BoolParser
 import Data.Base
+import Parser.StatementParser
 
-main =  print $ parse (parseNumberExp) "1 ADD 1"
+main =  print $ parse (parseExp) "1ADD2MULOPEN3MUL4CLOSEGT4ANDTRUE"
