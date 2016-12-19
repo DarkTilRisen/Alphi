@@ -5,8 +5,6 @@ import Parser.Base
 import Data.Base
 import Data.Char
 
-
-
 -- match zero or more occurrences
 star :: Parser a -> Parser [a]
 star p = plus p `mplus` return []
@@ -40,6 +38,10 @@ parseString ""       = return ""
 parseString (x:xs)   = do { y <- token x;
                             parseString xs;
                             return (y:xs)}
+
+parseAlpha :: Parser String
+parseAlpha = do { x <- parseTrailingSpace $ plus $ spot isAlpha;
+                  return x;}
 
   -- parses whiteSpace and newlines
 parseWhiteSpace :: Parser String

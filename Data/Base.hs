@@ -44,6 +44,7 @@ true                = "TRUE"  -- eq true  --
 false               = "FALSE" -- eq false --
 while               = "WHILE"
 if'                 = "IF"
+stop                = "STOP"
 
 -- unary numeric operators --
 
@@ -64,6 +65,9 @@ gt                  = "GT"
 lt                  = "LT"
 eq                  = "EQ"
 
+
+keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
+            , true, false, if', add, sub, mul, div', mod', not', and', or', gt, lt, eq]
 --data Hierarchy a = Const Hierarchy
 --order of operations --
 orderBNumOp         =  [[(mul,  Mul),
@@ -72,11 +76,10 @@ orderBNumOp         =  [[(mul,  Mul),
                         [(add, Add),
                          (sub, Sub)]]
 
+boolLit             = [(true, True), (false, False)]
 uBoolOp             = [(not', Not)]
 binaryBoolOp        = [(and', And), (or', Or)]
 binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
-
-
 
 --errors--
 noParse        = "No parse was found!!!!!!"
