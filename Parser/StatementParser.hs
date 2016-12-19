@@ -24,14 +24,10 @@ parseAssign = do { x <-  parseAlpha;
                    return $ Var x y }
 
 parseIf :: Parser Statement
-parseIf = do {matchStr while;
+parseIf = do {matchStr if';
               x <- parseBoolExp;
               y <- parseBrackets parseStatement;
               return $ If x y}
 
-parseStatements :: Parser Statement
-parseStatements = do { x <- parseStatement; y <- parseStatement; return (Statements x y) }
-
-
 parseStatement :: Parser Statement
-parseStatement = parseWhile `mplus` parseAssign `mplus` parseIf `mplus` parseStatements
+parseStatement = parseWhile `mplus` parseIf `chainl1` (return Statements)

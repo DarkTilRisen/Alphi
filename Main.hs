@@ -7,4 +7,4 @@ import Parser.BoolParser
 import Data.Base
 import Parser.StatementParser
 
-main =  print $ parse (parseAlpha) "WHILE TRUE BEGIN 1ADD2MULOPEN3MUL4CLOSEGT4ANDTRUE END"
+--main =  print $ parse (parseStatement) "WHILE TRUE BEGIN tobiah IS 4 STOP END t IS 4 STOP t IS 5 STOP t IS 6 STOP"
