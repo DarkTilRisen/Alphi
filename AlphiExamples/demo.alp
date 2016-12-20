@@ -1,0 +1,6 @@
+WHILE TRUE BEGIN
+    tobiah IS 4 STOP
+END
+t IS 4 STOP
+x IS t STOP
+t IS 6 STOP

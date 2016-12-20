@@ -1,38 +1,37 @@
 module Data.Base where
 
 
+type Var = String
+
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
-                        | NVar             String          NumericExp
+                        | NVar            Var
+                        | NAssign         Var             NumericExp
                         | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
                         deriving (Show, Eq)
 
 data NumericBinaryOp = Add | Sub | Mul | Div | Mod deriving (Show, Eq)
 
 data BooleanExpr     =   LitBool         Bool
-                       | BVar            String          BooleanExpr
+                       | BVar            Var
+                       | BAssign         Var             BooleanExpr
                        | UnaryBoolOp     UnaryBoolOp     BooleanExpr
                        | BinaryBoolOp    BinaryBoolOp    BooleanExpr BooleanExpr
                        | BinaryAltBoolOp BinaryAltBoolOp NumericExp  NumericExp
                        deriving (Show, Eq)
 
-
-data Exp = BExpr BooleanExpr | NExpr NumericExp deriving (Show, Eq)
+data Exp             = BExpr BooleanExpr
+                     | NExpr NumericExp deriving (Show, Eq)
 
 data UnaryBoolOp     = Not deriving (Show, Eq)
 data BinaryBoolOp    = And | Or deriving (Show, Eq)
 data BinaryAltBoolOp = GreaterThan | SmallerThan | Equals deriving (Show, Eq)
 
 
-data Statement       =  Statements Statement Statement
-                      | If BooleanExpr Statement
-                      | While BooleanExpr Statement deriving (Show, Eq)
-
-
-
---data Type = Numb
---data Var a =
---type TypeMapping = [(String, Type)]
+data Statement       =  ExpStatement    Exp
+                      | Statements      Statement Statement
+                      | If              BooleanExpr Statement
+                      | While           BooleanExpr Statement deriving (Show, Eq)
 
 -- keywords --
 parOpen             = "OPEN"  -- eq (     --
@@ -69,7 +68,7 @@ eq                  = "EQ"
 
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
             , true, false, if', add, sub, mul, div', mod', not', and', or', gt, lt, eq]
---data Hierarchy a = Const Hierarchy
+
 --order of operations --
 orderBNumOp         =  [[(mul,  Mul),
                          (div', Div),

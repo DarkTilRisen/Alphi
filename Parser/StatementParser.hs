@@ -7,21 +7,15 @@ import Parser.Util
 import Data.Base
 import Parser.BoolParser
 
-parseExp :: Parser Exp
-parseExp = fmap BExpr parseBoolExp `mplus` fmap NExpr parseNumberExp
+parseExp :: Parser Statement
+parseExp =  fmap ExpStatement $ matchEnd $ fmap BExpr parseBoolExp `mplus` fmap NExpr parseNumberExp
+              where matchEnd p = do {x <- p; matchStr stop; return x}
 
 parseWhile :: Parser Statement
 parseWhile = do {matchStr while;
                  x <- parseBoolExp;
                  y <- parseBrackets parseStatement;
                  return $ While x y}
-
-parseAssign :: Parser Statement
-parseAssign = do { x <-  parseAlpha;
-                   matchStr assign;
-                   y <- parseExp;
-                   matchStr stop;
-                   return $ Var x y }
 
 parseIf :: Parser Statement
 parseIf = do {matchStr if';
@@ -30,4 +24,4 @@ parseIf = do {matchStr if';
               return $ If x y}
 
 parseStatement :: Parser Statement
-parseStatement = parseWhile `mplus` parseIf `chainl1` (return Statements)
+parseStatement =  parseExp `mplus` parseWhile `mplus` parseIf `chainl1` (return Statements)

@@ -1,4 +1,4 @@
-module Parser.NumericParser (parseNumberExp) where
+module Parser.NumericParser  where
 import Control.Applicative (Alternative(..))
 import Control.Monad
 import Parser.Base
@@ -21,16 +21,19 @@ parseDouble = do { x <- parseDigits;
                    y <- parseDigits;
                    return $ (read (x ++ "." ++ y) :: Double)}
 
+parseNumVar :: Parser NumericExp
+parseNumVar = fmap NVar parseAlpha
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
 parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt <|> fmap LitDouble parseDouble
 
-
+parseNumAssign :: Parser (NumericExp)
+parseNumAssign =  parseAssign parseNumberExp NAssign
 -- easyfy order of expressions
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
 chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
                     where f (s, cons) = createP1' s BinaryNumericOp cons
 
 parseNumberExp :: Parser NumericExp
-parseNumberExp = foldl chainExp base orderBNumOp
-                    where base =  parseNumLiteral <|> parseParens parseNumberExp
+parseNumberExp = parseNumAssign <|> foldl chainExp base orderBNumOp
+                    where base =  parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp

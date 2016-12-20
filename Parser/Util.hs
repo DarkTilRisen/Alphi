@@ -40,8 +40,8 @@ parseString (x:xs)   = do { y <- token x;
                             return (y:xs)}
 
 parseAlpha :: Parser String
-parseAlpha = do { x <- parseTrailingSpace $ plus $ spot isAlpha;
-                  return x;}
+parseAlpha = parseTrailingSpace $ plus $ spot isAlpha
+
 
   -- parses whiteSpace and newlines
 parseWhiteSpace :: Parser String
@@ -84,11 +84,16 @@ createP2' = createP2 . matchStr
 --- hahaha this is just an fmap you silly boy
 createP'' c p = p >>= (return . c)
 
+parseAssign :: Parser a -> (String -> a -> b) -> Parser (b)
+parseAssign p c = do { x <-  parseAlpha;
+                      matchStr assign;
+                      y <- p;
+                      return $ (c x y) }
 
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
 
 
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
-chainl1 p op = do {a <- p; rest a}
+chainl1 p op = p >>= rest --do {a <- p; rest a}
   where rest a = do {f <- op;b <- p;rest (f a b)} `mplus` return a
