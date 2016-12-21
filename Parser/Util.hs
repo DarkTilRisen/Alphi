@@ -40,7 +40,7 @@ parseString (x:xs)   = do { y <- token x;
                             return (y:xs)}
 
 parseAlpha :: Parser String
-parseAlpha = parseTrailingSpace $ plus $ spot isAlpha
+parseAlpha = parseTrailingSpace $ ( plus $ spot isAlpha)
 
 
   -- parses whiteSpace and newlines
@@ -95,5 +95,5 @@ parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
 
 
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
-chainl1 p op = p >>= rest --do {a <- p; rest a}
+chainl1 p op = p >>= rest
   where rest a = do {f <- op;b <- p;rest (f a b)} `mplus` return a

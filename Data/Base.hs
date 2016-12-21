@@ -1,8 +1,15 @@
 module Data.Base where
+import Data.Map
+
+type Var              = String
+
+type Env a            = [(Var, a)]
+
+type Env2D =  (Env Bool, Env Double)
+--type Types = Numeric | Boolean
 
 
-type Var = String
-
+--type Env a            = Map Var a --
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
                         | NVar            Var
@@ -46,6 +53,11 @@ while               = "WHILE"
 if'                 = "IF"
 stop                = "STOP"
 
+
+--types--
+num  =  "NUM"
+bool = "BOOL"
+
 -- unary numeric operators --
 
 -- binary numeric operators --
@@ -84,3 +96,4 @@ binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
 --errors--
 noParse        = "No parse was found!!!!!!"
 ambiguousParse = "Parse is ambiguous!!!!!!"
+evalerror = "something went wrong when evaluating"

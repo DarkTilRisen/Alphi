@@ -10,7 +10,7 @@ newtype Parser a = Parser (String -> [(a, String)])
 -- functor of a parser
 instance Functor Parser where
   fmap = liftM
-  
+
 -- Applicative of a parser
 instance Applicative Parser where
   pure   = return
@@ -34,7 +34,6 @@ instance Alternative Parser where
 -- Apply a parser
 apply :: Parser a -> String -> [(a, String)]
 apply (Parser f) s = f s
-
 
 option :: Parser a -> Parser a -> Parser a
 option p q = Parser $ \s -> case apply p s of

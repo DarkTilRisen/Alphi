@@ -10,6 +10,7 @@ import Data.Base
 --parse all boolean expressions--
 parseBoolExp :: Parser BooleanExpr
 parseBoolExp =  parseBoolAssign
+            <|> parseBoolVar
             <|> parseLitBool
             <|> (parseUOPBool uBoolOp)
             <|> (parseAltBinOPBool binaryAltBoolOp)
@@ -21,7 +22,10 @@ parseLitBool = createP1' true LitBool True `mplus` createP1' false LitBool False
 
 --parse a boolean assignment--
 parseBoolAssign :: Parser BooleanExpr
-parseBoolAssign = parseAssign parseBoolExp BAssign
+parseBoolAssign = matchStr bool >> parseAssign parseBoolExp BAssign
+
+parseBoolVar :: Parser BooleanExpr
+parseBoolVar = fmap BVar parseAlpha
 
 --parse a --
 parseUOPBool :: [(String,  UnaryBoolOp)] -> Parser BooleanExpr

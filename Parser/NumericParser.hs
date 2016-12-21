@@ -28,12 +28,12 @@ parseNumLiteral :: Parser NumericExp
 parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt <|> fmap LitDouble parseDouble
 
 parseNumAssign :: Parser (NumericExp)
-parseNumAssign =  parseAssign parseNumberExp NAssign
+parseNumAssign =  matchStr num >> parseAssign parseNumberExp NAssign
 -- easyfy order of expressions
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
 chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
                     where f (s, cons) = createP1' s BinaryNumericOp cons
 
 parseNumberExp :: Parser NumericExp
-parseNumberExp = parseNumAssign <|> foldl chainExp base orderBNumOp
-                    where base =  parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp
+parseNumberExp =  foldl chainExp base orderBNumOp
+                    where base =  parseNumAssign <|> parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp
