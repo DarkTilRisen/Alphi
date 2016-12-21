@@ -35,5 +35,5 @@ chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
                     where f (s, cons) = createP1' s BinaryNumericOp cons
 
 parseNumberExp :: Parser NumericExp
-parseNumberExp =  foldl chainExp base orderBNumOp
-                    where base =  parseNumAssign <|> parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp
+parseNumberExp =  parseNumAssign <|>  foldl chainExp base orderBNumOp
+                    where base =  parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp

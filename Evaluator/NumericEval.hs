@@ -21,4 +21,4 @@ evalNumExpr (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExpr
 evalNumExpr (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExpr
 evalNumExpr (NVar x)                  = getVar x snd
 evalNumExpr (NAssign st x)            = assignSecond st x evalNumExpr
-evalNumExpr _                         = error evalerror
+evalNumExpr _                         = error "ddddddd"

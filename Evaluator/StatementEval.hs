@@ -21,11 +21,12 @@ evalStatement (While b s)        = evalWhile b s
 evalIf :: BooleanExpr -> Statement ->  StateT Env2D (IO) ()
 evalIf b s  = evalBoolExpr b >>= check
   where check True  = evalStatement s >> return ()
-        check False = return ()
+        check (False) = return ()
+        check x    = return ()
 
 evalWhile :: BooleanExpr -> Statement ->  StateT Env2D (IO) ()
-evalWhile b s = evalBoolExpr b >>= check
-  where check True  = evalStatement s >> evalStatement s >> evalStatement (While b s)
+evalWhile b s = evalBoolExpr b >>=  \x -> check x
+  where check True  = evalStatement s >> evalStatement (While b s)
         check False = return ()
 
 

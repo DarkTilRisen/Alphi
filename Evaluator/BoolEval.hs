@@ -5,7 +5,7 @@ import Data.Base
 import Evaluator.Util
 import Evaluator.NumericEval
 evalBoolExpr :: BooleanExpr -> (StateT (Env2D) IO (Bool))
-evalBoolExpr (LitBool x)                       = return  x
+evalBoolExpr (LitBool x)                       = return x
 evalBoolExpr (UnaryBoolOp Not x )              = evalUOp (not) x evalBoolExpr
 evalBoolExpr (BinaryBoolOp And x y)            = evalBOp (&&) x y evalBoolExpr
 evalBoolExpr (BinaryBoolOp Or  x y)            = evalBOp (||) x y evalBoolExpr

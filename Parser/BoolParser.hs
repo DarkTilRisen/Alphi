@@ -10,8 +10,8 @@ import Data.Base
 --parse all boolean expressions--
 parseBoolExp :: Parser BooleanExpr
 parseBoolExp =  parseBoolAssign
-            <|> parseBoolVar
             <|> parseLitBool
+            <|> parseBoolVar
             <|> (parseUOPBool uBoolOp)
             <|> (parseAltBinOPBool binaryAltBoolOp)
             `chainl1` (parseBinOPBool binaryBoolOp)
