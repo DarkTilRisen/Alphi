@@ -40,6 +40,9 @@ option p q = Parser $ \s -> case apply p s of
                               []  -> apply q s
                               xs -> xs
 
+failed :: Parser a
+failed = Parser $ \s -> []
+
 showParse :: (Show a) => Parser a -> String -> String
 showParse m s = concat . intersperse ", " . map show $ apply m s
 

@@ -2,14 +2,9 @@ module Data.Base where
 import Data.Map
 
 type Var              = String
-
 type Env a            = [(Var, a)]
+type Env2D            = (Env Bool, Env Double)
 
-type Env2D =  (Env Bool, Env Double)
---type Types = Numeric | Boolean
-
-
---type Env a            = Map Var a --
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
                         | NVar            Var
@@ -94,6 +89,10 @@ binaryBoolOp        = [(and', And), (or', Or)]
 binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
 
 --errors--
-noParse        = "No parse was found!!!!!!"
-ambiguousParse = "Parse is ambiguous!!!!!!"
-evalerror = "something went wrong when evaluating"
+
+--parsing errors --
+noParse             = "No parse was found!!!!!!"
+ambiguousParse      = "Parse is ambiguous!!!!!!"
+evalerror           = "something went wrong when evaluating"
+--eval errors --
+varNotFound         = "var was not found" 

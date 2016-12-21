@@ -36,4 +36,4 @@ chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
 
 parseNumberExp :: Parser NumericExp
 parseNumberExp =  parseNumAssign <|>  foldl chainExp base orderBNumOp
-                    where base =  parseNumLiteral <|> parseNumVar <|> parseParens parseNumberExp
+                    where base =  parseNumLiteral `mplus` parseNumVar `mplus` parseParens parseNumberExp

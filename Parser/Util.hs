@@ -40,7 +40,9 @@ parseString (x:xs)   = do { y <- token x;
                             return (y:xs)}
 
 parseAlpha :: Parser String
-parseAlpha = parseTrailingSpace $ ( plus $ spot isAlpha)
+parseAlpha = parseTrailingSpace $ ( plus $ spot isAlpha) >>= isKeyword
+    where isKeyword x =  if (elem x keywords)  then failed else return x    
+
 
 
   -- parses whiteSpace and newlines

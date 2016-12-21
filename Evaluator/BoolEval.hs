@@ -4,6 +4,7 @@ import Control.Monad.State
 import Data.Base
 import Evaluator.Util
 import Evaluator.NumericEval
+
 evalBoolExpr :: BooleanExpr -> (StateT (Env2D) IO (Bool))
 evalBoolExpr (LitBool x)                       = return x
 evalBoolExpr (UnaryBoolOp Not x )              = evalUOp (not) x evalBoolExpr
