@@ -4,7 +4,7 @@ import Data.Map
 type Var              = String
 type Env a            = [(Var, a)]
 type Env2D            = (Env Bool, Env Double)
-
+emptyEnv2D            = ([],[])
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
                         | NVar            Var
@@ -95,4 +95,4 @@ noParse             = "No parse was found!!!!!!"
 ambiguousParse      = "Parse is ambiguous!!!!!!"
 evalerror           = "something went wrong when evaluating"
 --eval errors --
-varNotFound         = "var was not found" 
+varNotFound         = "var was not found"

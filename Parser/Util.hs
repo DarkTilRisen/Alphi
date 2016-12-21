@@ -41,9 +41,7 @@ parseString (x:xs)   = do { y <- token x;
 
 parseAlpha :: Parser String
 parseAlpha = parseTrailingSpace $ ( plus $ spot isAlpha) >>= isKeyword
-    where isKeyword x =  if (elem x keywords)  then failed else return x    
-
-
+    where isKeyword x =  if (elem x keywords)  then failed else return x
 
   -- parses whiteSpace and newlines
 parseWhiteSpace :: Parser String
@@ -81,13 +79,9 @@ createP1' = createP1 . matchStr
 createP2' :: String -> (b  -> c  -> d) -> b -> c -> Parser d
 createP2' = createP2 . matchStr
 
---createP'' :: Parser a -> (b -> c) -> Parser c
-
---- hahaha this is just an fmap you silly boy
-createP'' c p = p >>= (return . c)
 
 parseAssign :: Parser a -> (String -> a -> b) -> Parser (b)
-parseAssign p c = do { x <-  parseAlpha;
+parseAssign p c = do { x <- parseAlpha;
                       matchStr assign;
                       y <- p;
                       return $ (c x y) }
