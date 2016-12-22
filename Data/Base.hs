@@ -2,40 +2,47 @@ module Data.Base where
 import Data.Map
 
 type Var              = String
-type Env a            = [(Var, a)]
 
-type Env2D            = (Env Bool, Env Double)
-emptyEnv2D            = ([],[])
+type Env a            = [(Var, a)]
+emptyEnv              = []
+
+data ReturnValue      = Num Double | Boolean Bool | Void deriving (Show, Eq)
+
 data NumericExp       =   LitInteger      Int
                         | LitDouble       Double
                         | NVar            Var
-                        | NAssign         Var             NumericExp
                         | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
                         deriving (Show, Eq)
 
 data NumericBinaryOp = Add | Sub | Mul | Div | Mod deriving (Show, Eq)
 
 
-data BooleanExpr     =   LitBool         Bool
+data BooleanExp     =   LitBool         Bool
                        | BVar            Var
-                       | BAssign         Var             BooleanExpr
-                       | UnaryBoolOp     UnaryBoolOp     BooleanExpr
-                       | BinaryBoolOp    BinaryBoolOp    BooleanExpr BooleanExpr
+                       | UnaryBoolOp     UnaryBoolOp     BooleanExp
+                       | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
                        | BinaryAltBoolOp BinaryAltBoolOp NumericExp  NumericExp
                        deriving (Show, Eq)
-
-data Exp             = BExpr BooleanExpr
-                     | NExpr NumericExp deriving (Show, Eq)
 
 data UnaryBoolOp     = Not deriving (Show, Eq)
 data BinaryBoolOp    = And | Or deriving (Show, Eq)
 data BinaryAltBoolOp = GreaterThan | SmallerThan | Equals deriving (Show, Eq)
 
 
+data Exp             = BExpr BooleanExp
+                     | NExpr NumericExp
+                     | BAssign Var BooleanExp
+                     | NAssign Var NumericExp
+                     | Empty deriving (Show, Eq)
+
 data Statement       =  ExpStatement    Exp
                       | Statements      Statement Statement
-                      | If              BooleanExpr Statement
-                      | While           BooleanExpr Statement deriving (Show, Eq)
+                      | If              Exp Statement
+                      | While           Exp Statement
+                      | Command          Command Exp deriving (Show, Eq)
+
+
+data Command         = Print deriving (Show, Eq)
 
 -- keywords --
 parOpen             = "OPEN"  -- eq (     --
@@ -49,6 +56,7 @@ false               = "FALSE" -- eq false --
 while               = "WHILE"
 if'                 = "IF"
 stop                = "STOP"
+command             = "COMMAND"
 
 
 --types--

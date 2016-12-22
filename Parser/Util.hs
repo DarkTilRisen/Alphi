@@ -80,13 +80,6 @@ createP2' :: String -> (b  -> c  -> d) -> b -> c -> Parser d
 createP2' = createP2 . matchStr
 
 
-parseAssign :: Parser a -> (String -> a -> b) -> Parser (b)
-parseAssign p c = do { x <- parseAlpha;
-                      matchStr assign;
-                      y <- p;
-                      return $ (c x y) }
-
-
 
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs

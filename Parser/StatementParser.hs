@@ -7,22 +7,39 @@ import Parser.Util
 import Data.Base
 import Parser.BoolParser
 
+parseExp :: Parser Exp
+parseExp = (assign' parseBoolExp BAssign bool)
+          `mplus` (assign' parseNumberExp NAssign num)
+          `mplus` fmap BExpr parseBoolExp
+          `mplus` fmap NExpr parseNumberExp
+        where assign' e c t = do {matchStr t; s <- parseAlpha ; matchStr assign;x <- e; return (c s x) }
 
-parseExp :: Parser Statement
-parseExp =  fmap ExpStatement $ matchEnd $ fmap BExpr parseBoolExp `mplus` fmap NExpr parseNumberExp
-              where matchEnd p = do {x <- p; matchStr stop; return x}
+matchEnd :: Parser a -> Parser a
+matchEnd p = do {x <- p; matchStr stop; return x}
+
+parseStatementExp :: Parser Statement
+parseStatementExp = matchEnd $ fmap ExpStatement $ parseExp
 
 parseWhile :: Parser Statement
 parseWhile = do {matchStr while;
-                 x <- parseBoolExp;
+                 x <- parseExp;
                  y <- parseBrackets parseStatement;
-                 return $ While x y}
+                 return (While x y)}
 
 parseIf :: Parser Statement
 parseIf = do {matchStr if';
-              x <- parseBoolExp;
+              x <- parseExp;
               y <- parseBrackets parseStatement;
               return $ If x y}
 
+--parseCommand :: String -> Parser Statement
+{-parseCommand s c = do {matchStr command;
+                    matchStr s;
+                    x <- parseExp;
+                    return (Command c x);
+                  }
+
+-}
 parseStatement :: Parser Statement
-parseStatement =  parseExp `mplus` parseWhile `mplus` parseIf `chainl1` (return Statements)
+parseStatement = base `chainl1` (return Statements)
+        where base = parseStatementExp `mplus` parseWhile `mplus` parseIf

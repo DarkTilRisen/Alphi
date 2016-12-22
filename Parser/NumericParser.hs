@@ -23,17 +23,17 @@ parseDouble = do { x <- parseDigits;
 
 parseNumVar :: Parser NumericExp
 parseNumVar = fmap NVar parseAlpha
+
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
 parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt `mplus` fmap LitDouble parseDouble
 
-parseNumAssign :: Parser (NumericExp)
-parseNumAssign =  matchStr num >> parseAssign parseNumberExp NAssign
+
 -- easyfy order of expressions
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
 chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
                     where f (s, cons) = createP1' s BinaryNumericOp cons
 
 parseNumberExp :: Parser NumericExp
-parseNumberExp =  parseNumAssign <|> foldl chainExp base orderBNumOp
+parseNumberExp = foldl chainExp base orderBNumOp
                     where base =  parseNumLiteral `mplus` parseNumVar `mplus` parseParens parseNumberExp

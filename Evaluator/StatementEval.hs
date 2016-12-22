@@ -6,22 +6,28 @@ import Evaluator.BoolEval
 import Evaluator.NumericEval
 
 
-evalExpr :: Exp -> (StateT (Env2D) IO ())
-evalExpr (BExpr e) = evalBoolExpr e >> return ()
-evalExpr (NExpr e) = evalNumExpr  e >> return ()
+evalExpr :: Exp -> (StateT (Env ReturnValue) IO) ReturnValue
+evalExpr (BExpr e)      = evalBoolExpr e
+evalExpr (NExpr e)      = evalNumExpr  e
+evalExpr (NAssign st e) = do {x <- evalNumExpr e ;state $ \s -> (x,insertVar st x s)};
+evalExpr (BAssign st e) =  do {x <- evalBoolExpr e ;state $ \s -> (x,insertVar st x s)};
 
-evalStatement :: Statement -> StateT Env2D (IO) ()
-evalStatement (ExpStatement e)   = evalExpr e >> return ()
-evalStatement (Statements s1 s2) = evalStatement s1 >> evalStatement s2 >> return ()
-evalStatement (If b s)           = evalIf b s
-evalStatement (While b s)        = evalWhile b s
 
-evalIf :: BooleanExpr -> Statement ->  StateT Env2D (IO) ()
-evalIf b s  = evalBoolExpr b >>= check
-  where check True  = evalStatement s >> return ()
-        check (False) = return ()
+evalStatement :: Statement -> StateT (Env ReturnValue) (IO) ReturnValue
+evalStatement (ExpStatement e)      = evalExpr e
+evalStatement (Statements s1 s2)    = evalStatement s1 >> evalStatement s2
+evalStatement (If b s)              = evalIf b s
+evalStatement (While b s)           = evalWhile b s
 
-evalWhile :: BooleanExpr -> Statement ->  StateT Env2D (IO) ()
-evalWhile b s = evalBoolExpr b >>=  \x -> check x
-  where check True  = evalStatement s >> evalStatement (While b s)
-        check False = return ()
+
+evalIf :: Exp -> Statement ->  StateT (Env ReturnValue) (IO) ReturnValue
+evalIf b s  = evalExpr b >>= check
+  where check (Boolean True)  = evalStatement s >> return Void
+        check (Boolean False) = return Void
+        check x               = error impossibleState
+
+evalWhile :: Exp -> Statement ->  StateT (Env ReturnValue) (IO) ReturnValue
+evalWhile b s = evalExpr b >>= check
+  where check (Boolean True)  = evalStatement s >> evalStatement (While b s)
+        check (Boolean False) = return Void
+        check x               = error impossibleState

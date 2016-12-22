@@ -2,25 +2,28 @@ module Evaluator.Util where
 import Control.Monad.State
 import Data.Base
 
-evalBOp :: Monad m => (t1 -> t1 -> b) -> t -> t -> (t -> m t1) -> m b
-evalBOp f x y e = do {x' <- e x; y' <- e y; return (f x' y')}
+evalBOp :: Monad m => (t3 -> t3 -> t2) -> t -> t -> (t -> m t1) -> (t1 -> t3) -> (t2 -> b) -> m b
 
-evalUOp :: Monad m => (t -> b) -> t1 -> (t1 -> m t) -> m b
-evalUOp f x e   = do {x' <- e x; return (f x')}
+evalBOp f x y e g c = do {x' <- e x; y' <- e y; return (c (f (g x') (g y')))}
 
-assignFirst :: String -> BooleanExpr ->  (BooleanExpr -> (StateT (Env2D) IO (Bool))) -> (StateT (Env2D) IO (Bool))
-assignFirst st x e = e x >>= \y -> state $ \s -> (y,(setEnv s st y))
-  where setEnv (b, d) st x = ((st, x):(removeVar st b),d)
-
-assignSecond :: String -> NumericExp ->  (NumericExp -> (StateT (Env2D) IO (Double))) -> (StateT (Env2D) IO (Double))
-assignSecond st x e = e x >>= \y -> state $ \s -> (y,(setEnv s st y))
-  where setEnv (b, d) st x = (b,(st, x):(removeVar st d))
-
+-- lookup a value in an envor
+lookup' :: Eq a => a -> [(a, b)] -> b
 lookup' x env =  maybe (error varNotFound) id (lookup x env)
 
-getVar :: String -> (Env2D -> Env b) -> (StateT (Env2D) IO (b))
-getVar x f = state $ \s -> (lookup' x (f s),s)
+insertVar :: String -> a -> Env a -> Env a
+insertVar s a env =  (s,a):(remove s env)
+  where remove s env = filter (\(s1,a) -> (s1 /= s)) env
 
-removeVar :: String -> Env a -> Env a
-removeVar s env = filter (matchVar s) env
-  where matchVar s (k, v) = (k/=s)
+-- extract a value from an environment
+getVar :: String -> Env a -> (a -> b) -> b
+getVar s env f = f (lookup' s env)
+
+-- extract a Double from a return  value
+getNum :: ReturnValue -> Double
+getNum (Num x) = x
+getNum x       = error impossibleState
+
+-- extract boolean from  retrun value
+getBool :: ReturnValue -> Bool
+getBool (Boolean x) = x
+getBool x           = error impossibleState

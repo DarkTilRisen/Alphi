@@ -12,12 +12,11 @@ import Parser.Util
 import Parser.StatementParser
 import Evaluator.Util
 
-evalNumExpr :: NumericExp -> (StateT (Env2D) IO (Double))
-evalNumExpr (LitDouble x)   = (return ) x
-evalNumExpr (LitInteger x)  = (return . fromIntegral) x
-evalNumExpr (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExpr
-evalNumExpr (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExpr
-evalNumExpr (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExpr
-evalNumExpr (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExpr
-evalNumExpr (NVar x)                  = getVar x snd
-evalNumExpr (NAssign st x)            = assignSecond st x evalNumExpr
+evalNumExpr :: NumericExp -> (StateT (Env ReturnValue) IO (ReturnValue))
+evalNumExpr (LitDouble x)             = (return . Num ) x
+evalNumExpr (LitInteger x)            = (return . Num . fromIntegral) (x)
+evalNumExpr (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExpr getNum Num
+evalNumExpr (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExpr getNum Num
+evalNumExpr (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExpr getNum Num
+evalNumExpr (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExpr getNum Num
+evalNumExpr (NVar x)                  = state $ \s -> (Num (getVar x s getNum),s)

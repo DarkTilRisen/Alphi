@@ -5,13 +5,11 @@ import Data.Base
 import Evaluator.Util
 import Evaluator.NumericEval
 
-evalBoolExpr :: BooleanExpr -> (StateT (Env2D) IO (Bool))
-evalBoolExpr (LitBool x)                       = return x
-evalBoolExpr (UnaryBoolOp Not x )              = evalUOp (not) x evalBoolExpr
-evalBoolExpr (BinaryBoolOp And x y)            = evalBOp (&&) x y evalBoolExpr
-evalBoolExpr (BinaryBoolOp Or  x y)            = evalBOp (||) x y evalBoolExpr
-evalBoolExpr (BinaryAltBoolOp GreaterThan x y) = evalBOp (>)  x y evalNumExpr
-evalBoolExpr (BinaryAltBoolOp SmallerThan x y) = evalBOp (<)  x y evalNumExpr
-evalBoolExpr (BinaryAltBoolOp Equals x y )     = evalBOp (==) x y evalNumExpr
-evalBoolExpr (BVar x)                          = getVar x fst
-evalBoolExpr (BAssign st x)                    = assignFirst st x evalBoolExpr
+evalBoolExpr :: BooleanExp -> (StateT (Env ReturnValue) IO (ReturnValue))
+evalBoolExpr (LitBool x)                          = return (Boolean x)
+evalBoolExpr (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExpr getBool Boolean
+evalBoolExpr (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExpr getBool Boolean
+evalBoolExpr (BinaryAltBoolOp GreaterThan x y)    = evalBOp (>)  x y evalNumExpr getNum Boolean
+evalBoolExpr (BinaryAltBoolOp SmallerThan x y)    = evalBOp (<)  x y evalNumExpr getNum Boolean
+evalBoolExpr (BinaryAltBoolOp Equals x y )        = evalBOp (==) x y evalNumExpr getNum Boolean
+evalBoolExpr (BVar x)                             = state $ \s -> (Boolean(getVar x s getBool),s)
