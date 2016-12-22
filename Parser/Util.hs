@@ -61,23 +61,13 @@ parseBrackets :: Parser a -> Parser a
 parseBrackets p = do {matchStr bracketsOpen ; x <- p; matchStr bracketsClosed; return x }
 
 
-createP :: Parser a -> b -> Parser b
-createP p c = p >> (return c)
 
 createP1 :: Parser a -> (b -> c) -> b -> Parser c
 createP1 p c a1 = p >> (return . c) a1
 
-createP2 :: Parser a -> (b  -> c  -> d) -> b -> c -> Parser d
-createP2 p c a1 a2 = p >> (return . c a1) a2
-
-createP' :: String ->  b -> Parser b
-createP'  = createP . matchStr
 
 createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
-
-createP2' :: String -> (b  -> c  -> d) -> b -> c -> Parser d
-createP2' = createP2 . matchStr
 
 
 

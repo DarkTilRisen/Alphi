@@ -18,11 +18,9 @@ parseAll s = parseResult parseStatement (dropWhile isSpace s)
 eval :: String -> IO (ReturnValue, Env ReturnValue)
 eval s = runStateT  (evalStatement (parseAll s)) []
 
-
-
 main :: IO ()
-main = do {x <- readFile "AlphiExamples/demo-1.alp";
+main = do {x <- readFile "AlphiExamples/demo1.alp";
            putStrLn $ show $ parseAll x;
-            y <- eval x;
+           y <- eval x;
            putStrLn $ show $  y;
           }

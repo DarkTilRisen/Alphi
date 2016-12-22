@@ -57,6 +57,7 @@ while               = "WHILE"
 if'                 = "IF"
 stop                = "STOP"
 command             = "COMMAND"
+print'              = "PRINT"
 
 
 --types--
