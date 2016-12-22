@@ -51,7 +51,7 @@ parse m s = [ (x,t) | (x,t) <- apply m s, t == "" ]
 
 -- Return parsed value, assuming at least one successful parse
 parseResult :: Parser a -> String -> a
-parseResult p s= one $ parse p s
+parseResult p s          = one $ parse p s
   where
   one []                 = error noParse
   one [x]                = fst x

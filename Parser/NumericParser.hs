@@ -25,7 +25,7 @@ parseNumVar :: Parser NumericExp
 parseNumVar = fmap NVar parseAlpha
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
-parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt <|> fmap LitDouble parseDouble
+parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt `mplus` fmap LitDouble parseDouble
 
 parseNumAssign :: Parser (NumericExp)
 parseNumAssign =  matchStr num >> parseAssign parseNumberExp NAssign

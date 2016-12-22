@@ -3,6 +3,7 @@ import Data.Map
 
 type Var              = String
 type Env a            = [(Var, a)]
+
 type Env2D            = (Env Bool, Env Double)
 emptyEnv2D            = ([],[])
 data NumericExp       =   LitInteger      Int
@@ -13,6 +14,7 @@ data NumericExp       =   LitInteger      Int
                         deriving (Show, Eq)
 
 data NumericBinaryOp = Add | Sub | Mul | Div | Mod deriving (Show, Eq)
+
 
 data BooleanExpr     =   LitBool         Bool
                        | BVar            Var
@@ -50,8 +52,8 @@ stop                = "STOP"
 
 
 --types--
-num  =  "NUM"
-bool = "BOOL"
+num                 =  "NUM"
+bool                = "BOOL"
 
 -- unary numeric operators --
 
@@ -96,3 +98,4 @@ ambiguousParse      = "Parse is ambiguous!!!!!!"
 evalerror           = "something went wrong when evaluating"
 --eval errors --
 varNotFound         = "var was not found"
+impossibleState     = "state not possible"

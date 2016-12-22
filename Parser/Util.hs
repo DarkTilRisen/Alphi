@@ -86,9 +86,10 @@ parseAssign p c = do { x <- parseAlpha;
                       y <- p;
                       return $ (c x y) }
 
+
+
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
-
 
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl1 p op = p >>= rest
