@@ -1,9 +1,8 @@
 module Parser.Base where
-import Control.Applicative (Alternative(..))
+import Control.Applicative
 import Control.Monad
 import Data.Base
 import Data.List
---import Parser.NumericParsers (parseNumericExp)
 
 newtype Parser a = Parser (String -> [(a, String)])
 
@@ -23,7 +22,7 @@ instance Monad Parser where
 
 -- monadPlus Defenition parser
 instance MonadPlus Parser where
-  mzero     = Parser (\s -> [])
+  mzero     = Parser $ const []
   mplus m n = Parser (\s -> apply m s ++ apply n s)
 
 -- Alternative of a parser
@@ -33,7 +32,7 @@ instance Alternative Parser where
 
 -- Apply a parser
 apply :: Parser a -> String -> [(a, String)]
-apply (Parser f) s = f s
+apply (Parser f) = f
 
 option :: Parser a -> Parser a -> Parser a
 option p q = Parser $ \s -> case apply p s of
@@ -41,10 +40,7 @@ option p q = Parser $ \s -> case apply p s of
                               xs -> xs
 
 failed :: Parser a
-failed = Parser $ \s -> []
-
-showParse :: (Show a) => Parser a -> String -> String
-showParse m s = concat . intersperse ", " . map show $ apply m s
+failed = Parser $ const []
 
 parse :: Parser a -> String -> [(a, String)]
 parse m s = [ (x,t) | (x,t) <- apply m s, t == "" ]

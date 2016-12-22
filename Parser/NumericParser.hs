@@ -1,5 +1,5 @@
-module Parser.NumericParser  where
-import Control.Applicative (Alternative(..))
+module Parser.NumericParser (parseNumberExp) where
+import Control.Applicative
 import Control.Monad
 import Parser.Base
 import Data.Char
@@ -14,12 +14,12 @@ parseDigits = plus $ spot isDigit
 parseInt :: Parser Int
 parseInt = fmap read parseDigits
 
---parses an Float
+--parses a Float
 parseDouble :: Parser Double
 parseDouble = do { x <- parseDigits;
                    parseString floatSep;
                    y <- parseDigits;
-                   return $ (read (x ++ "." ++ y) :: Double)}
+                   return (read (x ++ "." ++ y) :: Double)}
 
 parseNumVar :: Parser NumericExp
 parseNumVar = fmap NVar parseAlpha

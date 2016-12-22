@@ -1,11 +1,11 @@
-module Evaluator.BoolEval where
+module Evaluator.BoolEval (evalBoolExpr) where
 
 import Control.Monad.State
 import Data.Base
 import Evaluator.Util
 import Evaluator.NumericEval
 
-evalBoolExpr :: BooleanExp -> (StateT (Env ReturnValue) IO (ReturnValue))
+evalBoolExpr :: BooleanExp -> StateT (Env ReturnValue) IO ReturnValue
 evalBoolExpr (LitBool x)                          = return (Boolean x)
 evalBoolExpr (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExpr getBool Boolean
 evalBoolExpr (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExpr getBool Boolean

@@ -1,4 +1,4 @@
-module Evaluator.StatementEval where
+module Evaluator.StatementEval (evalStatement) where
 import Data.Base
 import Control.Monad.State
 import Evaluator.Util
@@ -35,5 +35,5 @@ evalWhile b s = evalExpr b >>= check
 
 evalPrintCommand :: Exp ->  StateT (Env ReturnValue) IO ReturnValue
 evalPrintCommand e = do { x <- evalExpr e;
-                          liftIO (putStrLn $ show (getNum x));
+                          liftIO (print (getNum x));
                           return Void}

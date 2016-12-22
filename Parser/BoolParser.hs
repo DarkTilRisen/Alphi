@@ -1,5 +1,5 @@
-module Parser.BoolParser where
-import Control.Applicative (Alternative(..))
+module Parser.BoolParser (parseBoolExp) where
+import Control.Applicative
 import Parser.NumericParser
 import Control.Monad
 import Parser.Base
@@ -11,8 +11,8 @@ parseBoolExp :: Parser BooleanExp
 parseBoolExp =  parseLitBool
             `mplus` parseBoolVar
             `mplus` parseParens parseBoolExp
-            `mplus` (parseAltBinOPBool binaryAltBoolOp)
-            `chainl1` (parseBinOPBool binaryBoolOp)
+            `mplus` parseAltBinOPBool binaryAltBoolOp
+            `chainl1` parseBinOPBool binaryBoolOp
 
 --parse a literal boolean--
 parseLitBool :: Parser BooleanExp
@@ -25,7 +25,7 @@ parseBoolVar = fmap BVar parseAlpha
 parseUOPBool :: [(String,  UnaryBoolOp)] -> Parser BooleanExp
 parseUOPBool     = parseFromTuple' parseU
 parseU (s, cons) = do { matchStr s;
-                        x <- (parseParens parseBoolExp) `mplus` parseLitBool;
+                        x <- parseParens parseBoolExp `mplus` parseLitBool;
                         (return . UnaryBoolOp cons) x;}
 
 

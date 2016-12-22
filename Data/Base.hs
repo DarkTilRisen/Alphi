@@ -58,13 +58,9 @@ if'                 = "IF"
 stop                = "STOP"
 command             = "COMMAND"
 print'              = "PRINT"
-
-
 --types--
 num                 =  "NUM"
 bool                = "BOOL"
-
--- unary numeric operators --
 
 -- binary numeric operators --
 add                 = "ADD"
@@ -82,7 +78,6 @@ or'                 = "OR"
 gt                  = "GT"
 lt                  = "LT"
 eq                  = "EQ"
-
 
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
             , true, false, if', add, sub, mul, div', mod', not', and', or', gt, lt, eq]

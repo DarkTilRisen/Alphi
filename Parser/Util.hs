@@ -40,16 +40,16 @@ parseString (x:xs)   = do { y <- token x;
                             return (y:xs)}
 
 parseAlpha :: Parser String
-parseAlpha = parseTrailingSpace $ ( plus $ spot isAlpha) >>= isKeyword
-    where isKeyword x =  if (elem x keywords)  then failed else return x
+parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
+    where isKeyword x =  if x `elem` keywords then failed else return x
 
   -- parses whiteSpace and newlines
 parseWhiteSpace :: Parser String
 parseWhiteSpace = star $ spot isSpace <|> token '\n'
 
 parseTrailingSpace :: Parser a -> Parser a
-parseTrailingSpace =  flip (>>=) f
-                        where f x = parseWhiteSpace >> return x
+parseTrailingSpace =  (=<<) $ \x -> parseWhiteSpace >> return x
+
 
 matchStr :: String -> Parser String
 matchStr = parseTrailingSpace . parseString
@@ -61,14 +61,11 @@ parseBrackets :: Parser a -> Parser a
 parseBrackets p = do {matchStr bracketsOpen ; x <- p; matchStr bracketsClosed; return x }
 
 
-
 createP1 :: Parser a -> (b -> c) -> b -> Parser c
 createP1 p c a1 = p >> (return . c) a1
 
-
 createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
-
 
 
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
