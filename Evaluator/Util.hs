@@ -11,12 +11,12 @@ lookup' :: Eq a => a -> [(a, b)] -> b
 lookup' x env =  fromMaybe (error varNotFound) (lookup x env)
 
 insertVar :: String -> a -> Env a -> Env a
-insertVar s a env =  (s,a):remove s env
+insertVar s a (env,d) =  ((s,a):remove s env,d)
   where remove s = filter (\(s1,a) -> (s1 /= s))
 
 -- extract a value from an environment
 getVar :: String -> Env a -> (a -> b) -> b
-getVar s env f = f (lookup' s env)
+getVar s (env,_) f = f (lookup' s env)
 
 -- extract a Double from a return  value
 getNum :: ReturnValue -> Double

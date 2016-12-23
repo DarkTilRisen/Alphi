@@ -1,5 +1,5 @@
 -- A more intuitive library
-module MBot.Base (move, readUltra, readLine, Motor, LineSensor, Led) where
+module Robot.Base where
 import System.HIDAPI hiding (error)
 import MBot
 import Data.Maybe

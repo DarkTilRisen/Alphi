@@ -1,9 +1,9 @@
-module Evaluator.NumericEval (evalNumExpr) where
+module Evaluator.NumericEval (evalNumExp) where
 import Control.Monad.State
 import Control.Monad
 import Data.Maybe
 import Parser.Base
-import Control.Monad.Trans.Maybe (MaybeT(..))
+import Control.Monad.Trans.Maybe
 import Parser.NumericParser
 import Parser.BoolParser
 import Data.Base
@@ -11,11 +11,11 @@ import Parser.Util
 import Parser.StatementParser
 import Evaluator.Util
 
-evalNumExpr :: NumericExp -> StateT (Env ReturnValue) IO ReturnValue
-evalNumExpr (LitDouble x)             = (return . Num ) x
-evalNumExpr (LitInteger x)            = (return . Num . fromIntegral) x
-evalNumExpr (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExpr getNum Num
-evalNumExpr (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExpr getNum Num
-evalNumExpr (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExpr getNum Num
-evalNumExpr (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExpr getNum Num
-evalNumExpr (NVar x)                  = state $ \s -> (Num (getVar x s getNum),s)
+evalNumExp :: NumericExp -> StateT (Env ReturnValue) IO ReturnValue
+evalNumExp (LitDouble x)             = (return . Num ) x
+evalNumExp (LitInteger x)            = (return . Num . fromIntegral) x
+evalNumExp (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExp getNum Num
+evalNumExp (NVar x)                  = state $ \s -> (Num (getVar x s getNum),s)

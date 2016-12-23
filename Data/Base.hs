@@ -1,48 +1,65 @@
 module Data.Base where
 import Data.Map
+import System.HIDAPI hiding (error)
 
 type Var              = String
+type Env a            = ([(Var, a)], Device)
+--emptyEnv              = []
 
-type Env a            = [(Var, a)]
-emptyEnv              = []
+data ReturnValue      = Num Double
+                      | Boolean Bool
+                      | Void
+                      deriving (Show, Eq)
 
-data ReturnValue      = Num Double | Boolean Bool | Void deriving (Show, Eq)
+data NumericExp       = LitInteger      Int
+                      | LitDouble       Double
+                      | NVar            Var
+                      | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
+                      deriving (Show, Eq)
 
-data NumericExp       =   LitInteger      Int
-                        | LitDouble       Double
-                        | NVar            Var
-                        | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
-                        deriving (Show, Eq)
+data NumericBinaryOp = Add
+                     | Sub
+                     | Mul
+                     | Div
+                     | Mod
+                     deriving (Show, Eq)
 
-data NumericBinaryOp = Add | Sub | Mul | Div | Mod deriving (Show, Eq)
-
-
-data BooleanExp     =   LitBool         Bool
-                       | BVar            Var
-                       | UnaryBoolOp     UnaryBoolOp     BooleanExp
-                       | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
-                       | BinaryAltBoolOp BinaryAltBoolOp NumericExp  NumericExp
-                       deriving (Show, Eq)
+data BooleanExp     = LitBool         Bool
+                    | BVar            Var
+                    | UnaryBoolOp     UnaryBoolOp     BooleanExp
+                    | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
+                    | BinaryAltBoolOp BinaryAltBoolOp NumericExp NumericExp
+                    deriving (Show, Eq)
 
 data UnaryBoolOp     = Not deriving (Show, Eq)
-data BinaryBoolOp    = And | Or deriving (Show, Eq)
-data BinaryAltBoolOp = GreaterThan | SmallerThan | Equals deriving (Show, Eq)
+
+data BinaryBoolOp    = And
+                     | Or
+                     deriving (Show, Eq)
+
+data BinaryAltBoolOp = GreaterThan
+                     | SmallerThan
+                     | Equals
+                     deriving (Show, Eq)
+
+data Exp             = BExp   BooleanExp
+                     | NExp   NumericExp
+                     | Input  Command
+                     deriving (Show, Eq)
 
 
-data Exp             = BExpr BooleanExp
-                     | NExpr NumericExp
-                     | BAssign Var BooleanExp
-                     | NAssign Var NumericExp
-                     | Empty deriving (Show, Eq)
+data Statement       = ExpStatement Exp
+                     | Assign       Var       Exp
+                     | Statements   Statement Statement
+                     | If           Exp       Statement
+                     | While        Exp       Statement
+                     | Output       Command   Exp
+                      deriving (Show, Eq)
 
-data Statement       =  ExpStatement    Exp
-                      | Statements      Statement Statement
-                      | If              Exp Statement
-                      | While           Exp Statement
-                      | Command          Command Exp deriving (Show, Eq)
-
-
-data Command         = Print deriving (Show, Eq)
+data Command         = Print
+                     | MotorRight
+                     | MotorLeft
+                     deriving (Show, Eq)
 
 -- keywords --
 parOpen             = "OPEN"  -- eq (     --
@@ -58,6 +75,7 @@ if'                 = "IF"
 stop                = "STOP"
 command             = "COMMAND"
 print'              = "PRINT"
+
 --types--
 num                 =  "NUM"
 bool                = "BOOL"
@@ -93,8 +111,6 @@ boolLit             = [(true, True), (false, False)]
 uBoolOp             = [(not', Not)]
 binaryBoolOp        = [(and', And), (or', Or)]
 binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
-
---errors--
 
 --parsing errors --
 noParse             = "No parse was found!!!!!!"
