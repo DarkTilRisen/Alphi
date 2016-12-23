@@ -21,7 +21,7 @@ eval :: String -> Device -> IO (ReturnValue, Env ReturnValue)
 eval s d = runStateT  (evalStatement (parseAll s)) ([], d)
 
 main :: IO ()
-main = do {st <- readFile "AlphiExamples/demo2.alp";
+main = do {st <- readFile "AlphiExamples/demo_line.alp";
            print $ parse parseStatement (dropWhile isSpace st);
            d  <- openMBot;
            eval st d;

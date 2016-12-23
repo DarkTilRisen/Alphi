@@ -22,7 +22,7 @@ parseDouble = do { x <- parseDigits;
                    return (read (x ++ "." ++ y) :: Double)}
 
 parseNumVar :: Parser NumericExp
-parseNumVar = fmap NVar parseAlpha
+parseNumVar = token num >> fmap NVar parseAlpha
 
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp

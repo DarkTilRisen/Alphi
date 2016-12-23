@@ -1,7 +1,5 @@
 import MBot
 
-
-
 main :: IO ()
 main = do {
   d <- openMBot;

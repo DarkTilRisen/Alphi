@@ -87,8 +87,8 @@ sensorR             = "SENSORR"
 ultra               = "ULTRA"
 
 --types--
-num                 = "NUM"
-bool                = "BOOL"
+num                 = 'N'
+bool                = 'B'
 
 -- binary numeric operators --
 add                 = "ADD"

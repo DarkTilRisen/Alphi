@@ -31,7 +31,7 @@ parseINCommand s c = matchStr command >> matchStr s >> (return . Input) c
 
 parseAssign :: Parser Statement
 parseAssign = matchEnd $ assign' bool `mplus` assign' num
-      where assign' t = do {matchStr t; s <- parseAlpha ; matchStr assign;x <- parseExp; return (Assign s x) }
+      where assign' t = do {token t; s <- parseAlpha ; matchStr assign;x <- parseExp; return (Assign s x) }
 
 parseStatement :: Parser Statement
 parseStatement = base `chainl1` return Statements

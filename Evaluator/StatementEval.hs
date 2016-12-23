@@ -28,7 +28,8 @@ evalStatement (Output t e)       = evalCommand t e
 
 
 evalCommand :: OUTCommand -> Exp -> StateT (Env ReturnValue) IO ReturnValue
-evalCommand Print  e      = evalExp e >>= (liftIO . print . getNum) >> return Void
+evalCommand Print (NExp e)      = evalNumExp e >>= (liftIO . print . getNum) >> return Void
+evalCommand Print (BExp e)      = evalBoolExp e >>= (liftIO . print . getBool ) >> return Void
 evalCommand MotorRight e  = do { x <- evalExp e;
                                  d <- getDevice;
                                  liftIO (move ((floor .getNum) x) MotorR (getDevice' d));
