@@ -4,7 +4,7 @@ import System.HIDAPI hiding (error)
 
 type Var              = String
 type Env a            = ([(Var, a)], Device)
-type MyState = StateT (Env ReturnValue) IO ReturnValue
+type MyState          = StateT (Env ReturnValue) IO ReturnValue
 
 data ReturnValue      = Num Double
                       | Boolean Bool
@@ -17,19 +17,19 @@ data NumericExp       = LitInteger      Int
                       | BinaryNumericOp NumericBinaryOp NumericExp NumericExp
                       deriving (Show, Eq)
 
-data NumericBinaryOp = Add
-                     | Sub
-                     | Mul
-                     | Div
-                     | Mod
-                     deriving (Show, Eq)
+data NumericBinaryOp  = Add
+                      | Sub
+                      | Mul
+                      | Div
+                      | Mod
+                      deriving (Show, Eq)
 
-data BooleanExp     = LitBool         Bool
-                    | BVar            Var
-                    | UnaryBoolOp     UnaryBoolOp     BooleanExp
-                    | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
-                    | BinaryAltBoolOp BinaryAltBoolOp NumericExp NumericExp
-                    deriving (Show, Eq)
+data BooleanExp       = LitBool         Bool
+                      | BVar            Var
+                      | UnaryBoolOp     UnaryBoolOp     BooleanExp
+                      | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
+                      | BinaryAltBoolOp BinaryAltBoolOp NumericExp NumericExp
+                      deriving (Show, Eq)
 
 data UnaryBoolOp     = Not deriving (Show, Eq)
 
