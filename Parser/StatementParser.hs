@@ -8,28 +8,26 @@ import Data.Base
 import Parser.BoolParser
 
 parseExp :: Parser Exp
-parseExp = fmap BExp parseBoolExp
+parseExp =        fmap BExp parseBoolExp
           `mplus` fmap NExp parseNumberExp
---        where assign' e c t = do {matchStr t; s <- parseAlpha ; matchStr assign;x <- e; return (c s x) }
---      assign' parseBoolExp BAssign bool
---     `mplus` assign' parseNumberExp NAssign num
+          `mplus` parseINCommand sensorL LineLeft
+          `mplus` parseINCommand sensorR LineRight
+          `mplus` parseINCommand ultra   ReadUltra
+
 matchEnd :: Parser a -> Parser a
 matchEnd p = do {x <- p; matchStr stop; return x}
 
 parseStatementExp :: Parser Statement
 parseStatementExp = matchEnd $  ExpStatement <$> parseExp
 
-parseWhile :: Parser Statement
-parseWhile = parseStruct while While
-
-parseIf :: Parser Statement
-parseIf =  parseStruct if' If
-
 parseStruct :: String -> (Exp -> Statement -> Statement) -> Parser Statement
 parseStruct s c = do { matchStr s;x <- parseExp ; y <- parseBrackets parseStatement ; return $ c x y}
 
-parseCommand :: String -> Command -> Parser Statement
-parseCommand s c = matchEnd $ fmap (Output c) (matchStr command >> matchStr s >> parseExp)
+parseOUTCommand :: String -> OUTCommand -> Parser Statement
+parseOUTCommand s c = matchEnd $ fmap (Output c) (matchStr command >> matchStr s >> parseExp)
+
+parseINCommand :: String -> INCommand -> Parser Exp
+parseINCommand s c = matchStr command >> matchStr s >> (return . Input) c
 
 parseAssign :: Parser Statement
 parseAssign = matchEnd $ assign' bool `mplus` assign' num
@@ -38,7 +36,9 @@ parseAssign = matchEnd $ assign' bool `mplus` assign' num
 parseStatement :: Parser Statement
 parseStatement = base `chainl1` return Statements
         where base = parseStatementExp
-                    `mplus` parseWhile
                     `mplus` parseAssign
-                    `mplus` parseIf
-                    `mplus` parseCommand print' Print
+                    `mplus` parseStruct if' If
+                    `mplus` parseStruct while While
+                    `mplus` parseOUTCommand print' Print
+                    `mplus` parseOUTCommand motorR MotorRight
+                    `mplus` parseOUTCommand motorL MotorLeft

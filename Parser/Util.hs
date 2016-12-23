@@ -45,7 +45,7 @@ parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
 
   -- parses whiteSpace and newlines
 parseWhiteSpace :: Parser String
-parseWhiteSpace = star $ spot isSpace <|> token '\n'
+parseWhiteSpace = plus $ spot isSpace <|> token '\n'
 
 parseTrailingSpace :: Parser a -> Parser a
 parseTrailingSpace =  (=<<) $ \x -> parseWhiteSpace >> return x

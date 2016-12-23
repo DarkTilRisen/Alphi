@@ -3,7 +3,7 @@ module Robot.Base where
 import System.HIDAPI hiding (error)
 import MBot
 import Data.Maybe
-import Data.Base
+import qualified Data.Base as Data
 import Data.Bits
 import GHC.Float
 
@@ -17,7 +17,7 @@ data LineSensor  = SensorL | SensorR deriving (Eq)
 data Led         = Led1    | Led2    deriving (Eq)
 
 find ::(Eq a) => a -> [(a,b)] -> b
-find x env = fromMaybe (error impossibleState) (lookup x env)
+find x env = fromMaybe (error Data.impossibleState) (lookup x env)
 
 
 -- Note I have no clue how this works !!!!!!
@@ -28,7 +28,7 @@ move s m d | m == MotorR && s > 0 = move' s stops
            | m == MotorR          = move' (complement (-s)) (complement stops)
            | m == MotorL && s > 0 = move' (complement s) (complement stops)
            | m == MotorL          = move' (-s) stops
-           | otherwise            = error impossibleState
+           | otherwise            = error Data.impossibleState
           where move' s x = sendCommand d $ setMotor (find m motors) s x
 
 --Read out the ultrasonic sensor and convert it to a IO(Double) --

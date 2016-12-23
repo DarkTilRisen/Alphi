@@ -7,6 +7,7 @@ import Evaluator.NumericEval
 
 evalBoolExp :: BooleanExp -> StateT (Env ReturnValue) IO ReturnValue
 evalBoolExp (LitBool x)                          = return (Boolean x)
+evalBoolExp (UnaryBoolOp Not x)                  = evalBoolExp x >>= return . Boolean . not . getBool
 evalBoolExp (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExp getBool Boolean
 evalBoolExp (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExp getBool Boolean
 evalBoolExp (BinaryAltBoolOp GreaterThan x y)    = evalBOp (>)  x y evalNumExp getNum Boolean

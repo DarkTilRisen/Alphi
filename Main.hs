@@ -11,6 +11,7 @@ import Evaluator.StatementEval
 import Data.Char
 import MBot
 import System.HIDAPI hiding (error)
+import Robot.Base
 import Parser.StatementParser
 
 parseAll :: String -> Statement
@@ -20,8 +21,8 @@ eval :: String -> Device -> IO (ReturnValue, Env ReturnValue)
 eval s d = runStateT  (evalStatement (parseAll s)) ([], d)
 
 main :: IO ()
-main = do {st <- readFile "AlphiExamples/demo-1.alp";
+main = do {st <- readFile "AlphiExamples/demo2.alp";
+           print $ parse parseStatement (dropWhile isSpace st);
            d  <- openMBot;
-           x  <- eval st d;
-           --print x;
-           closeMBot d; }--readFile "AlphiExamples/demo-1.alp" >>= eval >>= print
+           eval st d;
+           closeMBot d; }

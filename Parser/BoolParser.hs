@@ -12,6 +12,7 @@ parseBoolExp =  parseLitBool
             `mplus` parseBoolVar
             `mplus` parseParens parseBoolExp
             `mplus` parseAltBinOPBool binaryAltBoolOp
+            `mplus` parseUOPBool uBoolOp 
             `chainl1` parseBinOPBool binaryBoolOp
 
 --parse a literal boolean--

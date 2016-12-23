@@ -2,6 +2,7 @@ module Evaluator.Util where
 import Control.Monad.State
 import Data.Base
 import Data.Maybe
+import System.HIDAPI hiding (error)
 
 evalBOp :: Monad m => (t3 -> t3 -> t2) -> t -> t -> (t -> m t1) -> (t1 -> t3) -> (t2 -> b) -> m b
 evalBOp f x y e g c = do {x' <- e x; y' <- e y; return (c (f (g x') (g y')))}
@@ -17,6 +18,15 @@ insertVar s a (env,d) =  ((s,a):remove s env,d)
 -- extract a value from an environment
 getVar :: String -> Env a -> (a -> b) -> b
 getVar s (env,_) f = f (lookup' s env)
+
+getDevice :: StateT (Env ReturnValue) IO ReturnValue
+getDevice = state $ \s -> (getDevice' s, s)
+  where getDevice'  (env, d) = IO d
+
+
+getDevice' :: ReturnValue -> Device
+getDevice' (IO d) = d
+getDevice' x       = error impossibleState
 
 -- extract a Double from a return  value
 getNum :: ReturnValue -> Double

@@ -4,12 +4,11 @@ import System.HIDAPI hiding (error)
 
 type Var              = String
 type Env a            = ([(Var, a)], Device)
---emptyEnv              = []
 
 data ReturnValue      = Num Double
                       | Boolean Bool
+                      | IO      Device
                       | Void
-                      deriving (Show, Eq)
 
 data NumericExp       = LitInteger      Int
                       | LitDouble       Double
@@ -44,7 +43,7 @@ data BinaryAltBoolOp = GreaterThan
 
 data Exp             = BExp   BooleanExp
                      | NExp   NumericExp
-                     | Input  Command
+                     | Input  INCommand
                      deriving (Show, Eq)
 
 
@@ -53,13 +52,19 @@ data Statement       = ExpStatement Exp
                      | Statements   Statement Statement
                      | If           Exp       Statement
                      | While        Exp       Statement
-                     | Output       Command   Exp
+                     | Output       OUTCommand   Exp
                       deriving (Show, Eq)
 
-data Command         = Print
+data OUTCommand      = Print
                      | MotorRight
                      | MotorLeft
-                     deriving (Show, Eq)
+                     | Led1
+                     | Led2
+                      deriving (Show, Eq)
+
+data INCommand       = LineLeft
+                     | LineRight
+                     | ReadUltra deriving(Show, Eq)
 
 -- keywords --
 parOpen             = "OPEN"  -- eq (     --
@@ -75,9 +80,14 @@ if'                 = "IF"
 stop                = "STOP"
 command             = "COMMAND"
 print'              = "PRINT"
+motorR              = "MOTORR"
+motorL              = "MOTORL"
+sensorL             = "SENSORL"
+sensorR             = "SENSORR"
+ultra               = "ULTRA"
 
 --types--
-num                 =  "NUM"
+num                 = "NUM"
 bool                = "BOOL"
 
 -- binary numeric operators --
@@ -98,6 +108,7 @@ lt                  = "LT"
 eq                  = "EQ"
 
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
+            , command, print', motorR, motorL, sensorL , sensorR, ultra
             , true, false, if', add, sub, mul, div', mod', not', and', or', gt, lt, eq]
 
 --order of operations --
