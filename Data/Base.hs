@@ -67,45 +67,45 @@ data INCommand       = LineLeft
                      | ReadUltra deriving(Show, Eq)
 
 -- keywords --
-parOpen             = "OPEN"  -- eq (     --
-parClosed           = "CLOSE" -- eq )     --
-bracketsOpen        = "BEGIN" -- eq {     --
-bracketsClosed      = "END"   -- eq }     --
-assign              = "IS"    -- eq =     --
-floatSep            = "POINT" -- eq .     --
-true                = "TRUE"  -- eq true  --
-false               = "FALSE" -- eq false --
-while               = "WHILE"
-if'                 = "IF"
-stop                = "STOP"
-command             = "COMMAND"
-print'              = "PRINT"
-motorR              = "MOTORR"
-motorL              = "MOTORL"
-sensorL             = "SENSORL"
-sensorR             = "SENSORR"
-ultra               = "ULTRA"
+parOpen             = "Open"  -- eq (     --
+parClosed           = "Close" -- eq )     --
+bracketsOpen        = "Begin" -- eq {     --
+bracketsClosed      = "End"   -- eq }     --
+assign              = "Is"    -- eq =     --
+floatSep            = "Point" -- eq .     --
+true                = "True"  -- eq true  --
+false               = "False" -- eq false --
+while               = "While"
+if'                 = "If"
+stop                = "Stop"
+command             = "Command"
+print'              = "Print"
+motorR              = "MotorR"
+motorL              = "MotorL"
+sensorL             = "SensorL"
+sensorR             = "SensorR"
+ultra               = "Ultra"
 
 --types--
 num                 = 'N'
 bool                = 'B'
 
 -- binary numeric operators --
-add                 = "ADD"
-sub                 = "SUB"
-mul                 = "MUL"
-div'                = "DIV"
-mod'                = "MOD"
+add                 = "Add"
+sub                 = "Sub"
+mul                 = "Mul"
+div'                = "Div"
+mod'                = "Mod"
 
 -- unary boolean operators --
-not'                = "NOT"
+not'                = "Not"
 
 -- binary boolean operators --
-and'                = "AND"
-or'                 = "OR"
-gt                  = "GT"
-lt                  = "LT"
-eq                  = "EQ"
+and'                = "And"
+or'                 = "Or"
+gt                  = "Gt"
+lt                  = "Lt"
+eq                  = "Eq"
 
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
             , command, print', motorR, motorL, sensorL , sensorR, ultra

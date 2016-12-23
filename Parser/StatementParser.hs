@@ -15,7 +15,7 @@ parseExp =        fmap BExp parseBoolExp
           `mplus` parseINCommand ultra   ReadUltra
 
 matchEnd :: Parser a -> Parser a
-matchEnd p = do {x <- p; matchStr stop; return x}
+matchEnd p =  do {x <- p; matchStr stop; return x}
 
 parseStatementExp :: Parser Statement
 parseStatementExp = matchEnd $  ExpStatement <$> parseExp

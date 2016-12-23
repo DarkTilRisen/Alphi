@@ -6,20 +6,15 @@ import Parser.Base
 import Parser.Util
 import Data.Base
 
-parsersbool = [parseLitBool, parseBoolVar,
-               parseParens parseBoolExp,
-               parseAltBinOPBool binaryAltBoolOp,
-               parseUOPBool uBoolOp]
+
 --parse all boolean expressions--
 parseBoolExp :: Parser BooleanExp
-parseBoolExp = foldl1 mplus parsersbool
-              `chainl1` parseBinOPBool binaryBoolOp
-{-parseBoolExp =  parseLitBool
+parseBoolExp =  parseLitBool
             `mplus` parseBoolVar
             `mplus` parseParens parseBoolExp
             `mplus` parseAltBinOPBool binaryAltBoolOp
             `mplus` parseUOPBool uBoolOp
-            `chainl1` parseBinOPBool binaryBoolOp-}
+            `chainl1` parseBinOPBool binaryBoolOp
 
 --parse a literal boolean--
 parseLitBool :: Parser BooleanExp

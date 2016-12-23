@@ -1,26 +1,25 @@
-WHILE TRUE BEGIN
+While True Begin
 
-  BY IS COMMAND SENSORL STOP
-  BZ IS COMMAND SENSORR STOP
+  Bleft Is Command SensorL Stop
+  Bright Is Command SensorR Stop
 
-  IF BY AND BZ BEGIN
-    COMMAND MOTORL 70 STOP
-    COMMAND MOTORR 70 STOP
-  END
+  If Bleft And Bright Begin
+    Command MotorL 70 Stop
+    Command MotorR 70 Stop
+  End
 
-  IF BY AND NOT OPEN BZ CLOSE BEGIN
-      COMMAND MOTORL 0 STOP
-      COMMAND MOTORR 80 STOP
-  END
+  If Bleft And Not Open Bright Close Begin
+      Command MotorL 0 Stop
+      Command MotorR 80 Stop
+  End
 
-  IF BZ AND NOT OPEN BY CLOSE BEGIN
-      COMMAND MOTORL 80 STOP
-      COMMAND MOTORR 0 STOP
-  END
+  If Bright And Not Open Bleft Close Begin
+      Command MotorL 80 Stop
+      Command MotorR 0  Stop
+  End
 
-  IF NOT OPEN BZ OR BY CLOSE BEGIN
-    COMMAND MOTORL 0 SUB 60 STOP
-    COMMAND MOTORR 0 SUB 60 STOP
-  END
-  
-END
+  If Not Open Bright Or Bleft Close Begin
+    Command MotorL 0 Sub 60 Stop
+    Command MotorR 0 Sub 60 Stop
+  End
+End

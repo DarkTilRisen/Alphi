@@ -1,5 +1,5 @@
 module Parser.Util where
-import Control.Applicative (Alternative(..))
+import Control.Applicative
 import Control.Monad
 import Parser.Base
 import Data.Base
@@ -66,7 +66,6 @@ createP1 p c a1 = p >> (return . c) a1
 
 createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
-
 
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
