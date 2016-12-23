@@ -5,7 +5,7 @@ import Data.Base
 import Evaluator.Util
 import Evaluator.NumericEval
 
-evalBoolExp :: BooleanExp -> StateT (Env ReturnValue) IO ReturnValue
+evalBoolExp :: BooleanExp -> MyState
 evalBoolExp (LitBool x)                          = return (Boolean x)
 evalBoolExp (UnaryBoolOp Not x)                  = evalBoolExp x >>= return . Boolean . not . getBool
 evalBoolExp (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExp getBool Boolean

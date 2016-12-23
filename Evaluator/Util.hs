@@ -19,10 +19,13 @@ insertVar s a (env,d) =  ((s,a):remove s env,d)
 getVar :: String -> Env a -> (a -> b) -> b
 getVar s (env,_) f = f (lookup' s env)
 
-getDevice :: StateT (Env ReturnValue) IO ReturnValue
+getDevice :: MyState
 getDevice = state $ \s -> (getDevice' s, s)
   where getDevice'  (env, d) = IO d
 
+
+insert :: String -> ReturnValue ->  MyState
+insert st x = state $ \s -> (x,insertVar st x s)
 
 getDevice' :: ReturnValue -> Device
 getDevice' (IO d) = d

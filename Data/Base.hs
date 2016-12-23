@@ -4,6 +4,7 @@ import System.HIDAPI hiding (error)
 
 type Var              = String
 type Env a            = ([(Var, a)], Device)
+type MyState = StateT (Env ReturnValue) IO ReturnValue
 
 data ReturnValue      = Num Double
                       | Boolean Bool
