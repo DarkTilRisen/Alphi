@@ -5,6 +5,7 @@ import MBot
 import Data.Maybe
 import qualified Data.Base as Data
 import Data.Bits
+import Evaluator.Util
 import GHC.Float
 
 motors     = [(MotorR, 0xa), (MotorL, 0x9)]
@@ -15,9 +16,6 @@ stops      = 0
 data Motor       = MotorL  | MotorR  deriving (Eq)
 data LineSensor  = SensorL | SensorR deriving (Eq)
 data Led         = Led1    | Led2    deriving (Eq)
-
-find ::(Eq a) => a -> [(a,b)] -> b
-find x env = fromMaybe (error Data.impossibleState) (lookup x env)
 
 
 -- Note I have no clue how this works !!!!!!

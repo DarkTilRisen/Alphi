@@ -26,7 +26,8 @@ parseNumVar = token num >> fmap NVar parseAlpha
 
 --parse an LiteralNumber
 parseNumLiteral :: Parser NumericExp
-parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt `mplus` fmap LitDouble parseDouble
+parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt
+                               `mplus` fmap LitDouble parseDouble
 
 
 -- easyfy order of expressions
@@ -37,5 +38,5 @@ chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
 parseNumberExp :: Parser NumericExp
 parseNumberExp = foldl chainExp base orderBNumOp
                     where base =        parseNumVar
-                                `mplus` parseNumLiteral 
+                                `mplus` parseNumLiteral
                                 `mplus` parseParens parseNumberExp

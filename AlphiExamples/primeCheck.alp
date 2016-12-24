@@ -1,0 +1,19 @@
+Ncandidate Is 2 Stop
+
+While Ncandidate Lt 100 Begin
+
+  Ncheck Is 2 Stop
+  Nstop Is Ncandidate Div 2 Stop
+  BisPrime Is True Stop
+
+  While Ncheck Lt Nstop And BisPrime Begin
+    Command Print Ncandidate Stop
+
+  End
+
+  If BisPrime Begin
+    Command Print Ncandidate Stop
+  End
+
+  Ncandidate Is Ncandidate Add 1 Stop
+End

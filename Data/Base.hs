@@ -3,13 +3,14 @@ import Data.Map
 import System.HIDAPI hiding (error)
 import Control.Monad.State
 
+
 type Var              = String
-type Env a            = ([(Var, a)], Device)
+type Env a            = [(Var, a)]
 type MyState          = StateT (Env ReturnValue) IO ReturnValue
 
 data ReturnValue      = Num Double
                       | Boolean Bool
-                      | IO      Device
+                      | Dev      Device
                       | Void
 
 data NumericExp       = LitInteger      Int
@@ -62,11 +63,14 @@ data OUTCommand      = Print
                      | MotorLeft
                      | Led1
                      | Led2
+                     | CloseBotConnection
                       deriving (Show, Eq)
 
 data INCommand       = LineLeft
                      | LineRight
-                     | ReadUltra deriving(Show, Eq)
+                     | ReadUltra
+                     | OpenBotConnection
+                     deriving(Show, Eq)
 
 -- keywords --
 parOpen             = "Open"  -- eq (     --
@@ -87,6 +91,9 @@ motorL              = "MotorL"
 sensorL             = "SensorL"
 sensorR             = "SensorR"
 ultra               = "Ultra"
+device              = "Device"
+openBot            = "OpenMBot"
+closeBot           = "CloseMBot"
 
 --types--
 num                 = 'N'

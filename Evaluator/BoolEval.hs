@@ -13,4 +13,4 @@ evalBoolExp (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExp 
 evalBoolExp (BinaryAltBoolOp GreaterThan x y)    = evalBOp (>)  x y evalNumExp getNum Boolean
 evalBoolExp (BinaryAltBoolOp SmallerThan x y)    = evalBOp (<)  x y evalNumExp getNum Boolean
 evalBoolExp (BinaryAltBoolOp Equals x y )        = evalBOp (==) x y evalNumExp getNum Boolean
-evalBoolExp (BVar x)                             = state $ \s -> (Boolean(getVar x s getBool),s)
+evalBoolExp (BVar x)                             = state $ \s -> (find x s, s)--state $ \s -> (Boolean(getVar x s getBool), s)

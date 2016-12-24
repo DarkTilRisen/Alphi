@@ -18,4 +18,4 @@ evalNumExp (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExp getNum Num
 evalNumExp (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExp getNum Num
 evalNumExp (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExp getNum Num
 evalNumExp (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExp getNum Num
-evalNumExp (NVar x)                  = state $ \s -> (Num (getVar x s getNum),s)
+evalNumExp (NVar x)                  = state $ \s -> (find x s,s)  --state $ \s -> (Num (getVar x s getNum),s)

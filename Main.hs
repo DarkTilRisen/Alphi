@@ -18,11 +18,15 @@ parseAll :: String -> Statement
 parseAll s = parseResult parseStatement (dropWhile isSpace s)
 
 eval :: String -> Device -> IO (ReturnValue, Env ReturnValue)
-eval s d = runStateT  (evalStatement (parseAll s)) ([], d)
+eval s d = runStateT  (evalStatement (parseAll s)) [(device, Dev d)]
 
+eval' :: String -> IO (ReturnValue, Env ReturnValue)
+eval' s = runStateT  (evalStatement (parseAll s)) []
 main :: IO ()
 main = do {st <- readFile "AlphiExamples/demo_line.alp";
            print $ parse parseStatement (dropWhile isSpace st);
-           d  <- openMBot;
-           eval st d;
-           closeMBot d; }
+--           d  <- openMBot;
+            eval' st;
+            print "done"
+--           closeMBot d;
+         }
