@@ -1,4 +1,5 @@
 module Main where
+import System.HIDAPI hiding (error)
 import Control.Applicative
 import Control.Monad.State
 import Control.Monad
@@ -10,7 +11,6 @@ import Parser.Util
 import Evaluator.StatementEval
 import Data.Char
 import MBot
-import System.HIDAPI hiding (error)
 import Robot.Base
 import Parser.StatementParser
 

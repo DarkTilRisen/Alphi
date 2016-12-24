@@ -18,7 +18,7 @@ matchEnd :: Parser a -> Parser a
 matchEnd p =  do {x <- p; matchStr stop; return x}
 
 parseStatementExp :: Parser Statement
-parseStatementExp = matchEnd $  ExpStatement <$> parseExp
+parseStatementExp = matchEnd $ ExpStatement <$> parseExp
 
 parseStruct :: String -> (Exp -> Statement -> Statement) -> Parser Statement
 parseStruct s c = do { matchStr s;x <- parseExp ; y <- parseBrackets parseStatement ; return $ c x y}

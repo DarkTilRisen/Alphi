@@ -7,7 +7,7 @@ import Evaluator.NumericEval
 
 evalBoolExp :: BooleanExp -> MyState
 evalBoolExp (LitBool x)                          = return (Boolean x)
-evalBoolExp (UnaryBoolOp Not x)                  = evalBoolExp x >>= return . Boolean . not . getBool
+evalBoolExp (UnaryBoolOp Not x)                  = fmap (Boolean . not . getBool) (evalBoolExp x)
 evalBoolExp (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExp getBool Boolean
 evalBoolExp (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExp getBool Boolean
 evalBoolExp (BinaryAltBoolOp GreaterThan x y)    = evalBOp (>)  x y evalNumExp getNum Boolean

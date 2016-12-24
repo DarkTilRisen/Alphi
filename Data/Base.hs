@@ -1,6 +1,7 @@
 module Data.Base where
 import Data.Map
 import System.HIDAPI hiding (error)
+import Control.Monad.State
 
 type Var              = String
 type Env a            = ([(Var, a)], Device)
