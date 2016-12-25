@@ -6,35 +6,37 @@ import Data.Char
 import Parser.Util
 import Data.Base
 
---parses a series of digits
+-- Parser for a series of digits
 parseDigits :: Parser String
 parseDigits = plus $ spot isDigit
 
---parses an Int
+-- Parser for an integer
 parseInt :: Parser Int
 parseInt = fmap read parseDigits
 
---parses a Float
+-- Parser for doubles
 parseDouble :: Parser Double
 parseDouble = do { x <- parseDigits;
                    parseString floatSep;
                    y <- parseDigits;
                    return (read (x ++ "." ++ y) :: Double)}
 
+-- Parser for an numerical variable
 parseNumVar :: Parser NumericExp
 parseNumVar = token num >> fmap NVar parseAlpha
 
---parse an LiteralNumber
+-- Parser for an numeral
 parseNumLiteral :: Parser NumericExp
 parseNumLiteral = parseTrailingSpace $ fmap LitInteger parseInt
                                `mplus` fmap LitDouble parseDouble
 
 
--- easyfy order of expressions
+-- Function to make order of expressions easier
 chainExp:: Parser NumericExp -> [(String, NumericBinaryOp)] -> Parser NumericExp
 chainExp acc xs = chainl1 acc $ parseFromTuple' f xs
                     where f (s, cons) = createP1' s BinaryNumericOp cons
 
+-- Parser for all numerical expressions
 parseNumberExp :: Parser NumericExp
 parseNumberExp = foldl chainExp base orderBNumOp
                     where base =        parseNumVar

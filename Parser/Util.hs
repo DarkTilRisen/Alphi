@@ -41,25 +41,30 @@ parseString (x:xs)   = do { y <- token x;
 
 parseAlpha :: Parser String
 parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
-    where isKeyword x =  if x `elem` keywords then failed else return x
+    where isKeyword x =  if x `elem` keywords then mzero else return x
 
-  -- parses whiteSpace and newlines
+-- Parses whiteSpace, newlines
 parseWhiteSpace :: Parser String
 parseWhiteSpace = plus $ spot isSpace <|> token '\n'
 
+-- Creates a new parser that ignores newLines
 parseTrailingSpace :: Parser a -> Parser a
 parseTrailingSpace =  (=<<) $ \x -> parseWhiteSpace >> return x
 
-
+-- Match a certain keyword
 matchStr :: String -> Parser String
 matchStr = parseTrailingSpace . parseString
 
+-- Match parentheses
 parseParens :: Parser a -> Parser a
 parseParens p   = do {matchStr parOpen ; x <- p; matchStr parClosed; return x }
 
+-- Match
 parseBrackets :: Parser a -> Parser a
 parseBrackets p = do {matchStr bracketsOpen ; x <- p; matchStr bracketsClosed; return x }
 
+matchEnd :: Parser a -> Parser a
+matchEnd p =  do {x <- p; matchStr stop; return x}
 
 createP1 :: Parser a -> (b -> c) -> b -> Parser c
 createP1 p c a1 = p >> (return . c) a1
@@ -67,9 +72,12 @@ createP1 p c a1 = p >> (return . c) a1
 createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
 
+
+
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
 
+-- creates a new parser from a parser and a parser of an operator
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl1 p op = p >>= rest
   where rest a = do {f <- op;b <- p;rest (f a b)} `mplus` return a

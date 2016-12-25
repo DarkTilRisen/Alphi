@@ -4,9 +4,10 @@ import Control.Monad
 import Data.Base
 import Data.List
 
+-- Define new parser type
 newtype Parser a = Parser (String -> [(a, String)])
 
--- functor of a parser
+-- Functor of a parser
 instance Functor Parser where
   fmap = liftM
 
@@ -20,28 +21,29 @@ instance Monad Parser where
   return x = Parser (\s -> [(x,s)])
   m >>= k  = Parser (\s -> [ (y, u) | (x, t) <- apply m s, (y, u) <- apply (k x) t ])
 
--- monadPlus Defenition parser
+-- MonadPlus Defenition parser
 instance MonadPlus Parser where
   mzero     = Parser $ const []
   mplus m n = Parser (\s -> apply m s ++ apply n s)
 
 -- Alternative of a parser
 instance Alternative Parser where
-   (<|>)     = option
    empty     = mzero
+   (<|>)     = option
 
--- Apply a parser
+
+-- Apply a parser.
 apply :: Parser a -> String -> [(a, String)]
 apply (Parser f) = f
 
+-- Implement option for an alternative
 option :: Parser a -> Parser a -> Parser a
 option p q = Parser $ \s -> case apply p s of
                               []  -> apply q s
                               xs -> xs
 
-failed :: Parser a
-failed = Parser $ const []
 
+-- Return the parse from a parser
 parse :: Parser a -> String -> [(a, String)]
 parse m s = [ (x,t) | (x,t) <- apply m s, t == "" ]
 

@@ -12,23 +12,13 @@ find x env = fromMaybe (error varNotFound) (lookup x env)
 
 insertVar :: String -> a -> Env a -> Env a
 insertVar s a env =  (s,a):remove s env
-  where remove s = filter (\(s1,a) -> (s1 /= s))
-
--- extract a value from an environment
---getVar :: String -> Env a -> (a -> b) -> b
---getVar s (env,_) f = f (find s env)
+  where remove s  = filter (\(s1,a) -> (s1 /= s))
 
 getVar :: String -> Env a -> (a -> b) -> b
 getVar s env f = f $ find s env
 
-
-
 returnDevice :: MyState
 returnDevice =  state $ \s -> (find device s, s)
---getDevice :: MyState
---getDevice = getVar  d--state $ \s -> (getDevice' s, s)
-  --where getDevice'  (env, d) = IO d
-
 
 insert :: String -> ReturnValue ->  MyState
 insert st x = state $ \s -> (x,insertVar st x s)
@@ -39,8 +29,8 @@ getDevice x       = error impossibleState
 
 -- extract a Double from a return  value
 getNum :: ReturnValue -> Double
-getNum (Num x) = x
-getNum x       = error impossibleState
+getNum (Num x)    = x
+getNum x          = error impossibleState
 
 -- extract boolean from  retrun value
 getBool :: ReturnValue -> Bool

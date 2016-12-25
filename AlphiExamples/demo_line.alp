@@ -1,3 +1,5 @@
+Command OpenMBot Stop
+
 While True Begin
 
   Bleft Is Command SensorL Stop
@@ -23,3 +25,4 @@ While True Begin
     Command MotorR 0 Sub 60 Stop
   End
 End
+Command CloseMBot Stop

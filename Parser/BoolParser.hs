@@ -7,7 +7,7 @@ import Parser.Util
 import Data.Base
 
 
---parse all boolean expressions--
+-- Parser for all boolean expressions
 parseBoolExp :: Parser BooleanExp
 parseBoolExp =  parseLitBool
             `mplus` parseBoolVar
@@ -16,25 +16,31 @@ parseBoolExp =  parseLitBool
             `mplus` parseUOPBool uBoolOp
             `chainl1` parseBinOPBool binaryBoolOp
 
---parse a literal boolean--
+-- Parser for a literal boolean
 parseLitBool :: Parser BooleanExp
-parseLitBool = createP1' true LitBool True `mplus` createP1' false LitBool False
+parseLitBool =     createP1' true LitBool True
+           `mplus` createP1' false LitBool False
 
+-- Parser for a boolean variable
 parseBoolVar :: Parser BooleanExp
 parseBoolVar = token bool >> fmap BVar parseAlpha
 
---parse a --
+--parser for an Unary operator
 parseUOPBool :: [(String,  UnaryBoolOp)] -> Parser BooleanExp
 parseUOPBool     = parseFromTuple' parseU
-parseU (s, cons) = do { matchStr s;
-                        x <- parseParens parseBoolExp `mplus` parseLitBool;
-                        (return . UnaryBoolOp cons) x;}
+parseU (s, cons) = matchStr s
+               >>     parseParens parseBoolExp
+              `mplus` parseLitBool
+              `mplus` parseBoolVar
+               >>=    (return . UnaryBoolOp cons)
 
 
+-- Parser for a binary boolean operator
 parseBinOPBool :: [(String, BinaryBoolOp)] -> Parser (BooleanExp -> BooleanExp -> BooleanExp)
 parseBinOPBool     = parseFromTuple' parseBin
 parseBin (s, cons) = createP1' s BinaryBoolOp cons
 
+-- Parser for a numeral expresion boolean operator
 parseAltBinOPBool :: [(String, BinaryAltBoolOp)] -> Parser BooleanExp
 parseAltBinOPBool     = parseFromTuple' parseAltBin
 parseAltBin (s, cons) = do {x <- parseNumberExp;

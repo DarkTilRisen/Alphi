@@ -2,7 +2,6 @@
 module Robot.Base where
 import System.HIDAPI hiding (error)
 import MBot
-import Data.Maybe
 import qualified Data.Base as Data
 import Data.Bits
 import Evaluator.Util

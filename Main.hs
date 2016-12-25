@@ -1,32 +1,28 @@
 module Main where
-import System.HIDAPI hiding (error)
-import Control.Applicative
-import Control.Monad.State
-import Control.Monad
-import Parser.Base
-import Parser.NumericParser
-import Parser.BoolParser
-import Data.Base
-import Parser.Util
-import Evaluator.StatementEval
+
 import Data.Char
-import MBot
-import Robot.Base
+import Data.Base
+import Parser.Base
+import Control.Monad.State
 import Parser.StatementParser
+import Evaluator.StatementEval
 
+
+-- parses a string to a Statement
 parseAll :: String -> Statement
-parseAll s = parseResult parseStatement (dropWhile isSpace s)
+parseAll = (parseResult parseStatement) . (dropWhile isSpace)
 
-eval :: String -> Device -> IO (ReturnValue, Env ReturnValue)
-eval s d = runStateT  (evalStatement (parseAll s)) [(device, Dev d)]
 
-eval' :: String -> IO (ReturnValue, Env ReturnValue)
-eval' s = runStateT  (evalStatement (parseAll s)) []
+-- parses and evaluates a given string
+eval :: String -> IO (ReturnValue, Env ReturnValue)
+eval = flip (runStateT . evalStatement . parseAll) emptyEnv
+
+
+
+--run the parser and evaluator from a given file.
 main :: IO ()
-main = do {st <- readFile "AlphiExamples/demo_line.alp";
-           print $ parse parseStatement (dropWhile isSpace st);
---           d  <- openMBot;
-            eval' st;
-            print "done"
---           closeMBot d;
+main = do {st <- readFile "AlphiExamples/demo_ultra.alp";
+           (print . parseAll) st;
+           eval st;
+           print "done!!!!!"
          }

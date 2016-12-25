@@ -1,0 +1,17 @@
+Command OpenMBot Stop
+
+While True Begin
+  Ndistance Is Command Ultra Stop
+
+
+  If Ndistance Gt 40 Begin
+    Command MotorL 70 Stop
+    Command MotorR 70 Stop
+  End
+
+  If Ndistance Lt 39 Begin
+    Command MotorL 70 Stop
+    Command MotorR 0 Sub 70 Stop
+  End
+  Command Print Ndistance Stop
+End
