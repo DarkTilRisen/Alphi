@@ -24,10 +24,10 @@ parseStatementExp = matchEnd $ ExpStatement <$> parseExp
 
 -- Parser to easyfy structures like while loops and if expressions
 parseStruct :: String -> (Exp -> Statement -> Statement) -> Parser Statement
-parseStruct s c = do { matchStr s;
-                      x <- parseExp;
-                      y <- parseBrackets (parseStatement `mplus` return Empty) ;
-                      return $ c x y}
+parseStruct s c = do matchStr s
+                     x <- parseExp
+                     y <- parseBrackets $ parseStatement `mplus` return Empty
+                     return $ c x y
 
 -- Parser for an output command
 parseOUTCommand :: String -> OUTCommand -> Parser Statement
@@ -40,7 +40,11 @@ parseINCommand s c = matchStr command >> matchStr s >> (return . Input) c
 -- Parser for assignment of an expression
 parseAssign :: Parser Statement
 parseAssign = matchEnd $ assign' bool `mplus` assign' num
-      where assign' t = do {token t; s <- parseAlpha ; matchStr assign;x <- parseExp; return (Assign s x) }
+      where assign' t = do token t
+                           s <- parseAlpha
+                           matchStr assign
+                           x <- parseExp
+                           return (Assign s x)
 
 -- Parser for a Statement
 parseStatement :: Parser Statement

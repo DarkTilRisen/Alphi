@@ -81,17 +81,19 @@ data INCommand       = LineLeft
                      deriving(Show, Eq)
 
 -- keywords --
-parOpen             = "Open"    -- eq (     --
-parClosed           = "Close"   -- eq )     --
-bracketsOpen        = "Begin"   -- eq {     --
-bracketsClosed      = "End"     -- eq }     --
-assign              = "Is"      -- eq =     --
-floatSep            = "Point"   -- eq .     --
-true                = "True"    -- eq true  --
-false               = "False"   -- eq false --
-while               = "While"   -- eq while --
-if'                 = "If"      -- eq  if   --
-stop                = "Stop"    -- eq ;     --
+parOpen             = "Open"        -- eq (     --
+parClosed           = "Close"       -- eq )     --
+bracketsOpen        = "Begin"       -- eq {     --
+bracketsClosed      = "End"         -- eq }     --
+commentOpen         = "commentOpen" -- eq /*    --
+commentClose        = "commentClose"-- eq */    --
+assign              = "Is"          -- eq =     --
+floatSep            = "Point"       -- eq .     --
+true                = "True"        -- eq true  --
+false               = "False"       -- eq false --
+while               = "While"       -- eq while --
+if'                 = "If"          -- eq  if   --
+stop                = "Stop"        -- eq ;     --
 command             = "Command"
 print'              = "Print"
 motorR              = "MotorR"
