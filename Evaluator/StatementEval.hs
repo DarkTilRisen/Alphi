@@ -20,7 +20,7 @@ evalInput :: INCommand -> MyState
 evalInput ReadUltra          = evalInput' readUltra Num
 evalInput LineLeft           = evalInput' (readLine SensorL) Boolean
 evalInput LineRight          = evalInput' (readLine SensorR) Boolean
-evalInput OpenBotConnection  = liftIO openMBot >>= return . Dev >>= insert device
+evalInput OpenBotConnection  = fmap Dev (liftIO openMBot) >>= insert device
 evalInput CloseBotConnection = returnDevice >>= liftIO . closeMBot . getDevice >> return Void
 
 -- Evaluate statements
@@ -42,8 +42,7 @@ evalCommand MotorLeft  e         = evalMotor e MotorL
 
 -- Evaluate input
 evalInput' :: (Device -> IO a) -> (a -> ReturnValue) -> MyState
-evalInput' f c = returnDevice >>= liftIO . f . getDevice >>= (return . c)
-
+evalInput' f c = fmap c (returnDevice >>= liftIO . f . getDevice)
 -- Evaluate print commands
 evalPrint :: (Show a) => MyState -> (ReturnValue -> a) -> MyState
 evalPrint e f = e >>= (liftIO . print . f) >> return Void

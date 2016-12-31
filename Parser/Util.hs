@@ -43,17 +43,19 @@ parseAlpha :: Parser String
 parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
     where isKeyword x =  if x `elem` keywords then mzero else return x
 
--- Parses whiteSpace, newlines
+-- Parser that ignores whiteSpace and newlines
 parseWhiteSpace :: Parser String
-parseWhiteSpace = (plus $ spot isSpace <|> token '\n' )
+parseWhiteSpace = plus $ spot isSpace <|> token '\n' 
 
--- Creates a new parser that ignores newLines
+-- Creates a new parser that ignores newLines and whitespace
 parseTrailingSpace :: Parser a -> Parser a
-parseTrailingSpace =  (=<<) $ \x ->  parseWhiteSpace >> return x
+parseTrailingSpace p = whitespace p `mplus` (do {x <- whitespace p ; whitespace parseComments; return x })
+            where whitespace  = (=<<) $ \x ->  parseWhiteSpace >> return x
+
 
 -- Match a certain keyword
 matchStr :: String -> Parser String
-matchStr = parseTrailingSpace . parseString
+matchStr = parseTrailingSpace  . parseString
 
 -- Match parentheses
 parseParens :: Parser a -> Parser a
@@ -81,9 +83,12 @@ createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
 
 parseComments :: Parser String
-parseComments = parseWhiteSpace `mplus` (parseTrailingSpace $ matchStr commentOpen >> plus (spot $ \_ -> True) >>= isKeyword >> matchStr commentClose)
-    where isKeyword x | x == commentClose = mzero
-                      | otherwise         = return x
+parseComments = do parseString commentOpen
+                   findclose
+                where findclose = parseString commentClose
+                                  <|> (spot (const True) >> findclose)
+
+
 
 parseFromTuple' :: (Functor t, Foldable t, MonadPlus m) => (a1 -> m a) -> t a1 -> m a
 parseFromTuple' f xs  = foldl1 mplus $ fmap f xs

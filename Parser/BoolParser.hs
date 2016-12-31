@@ -28,11 +28,10 @@ parseBoolVar = token bool >> fmap BVar parseAlpha
 --parser for an Unary operator
 parseUOPBool :: [(String,  UnaryBoolOp)] -> Parser BooleanExp
 parseUOPBool     = parseFromTuple' parseU
-parseU (s, cons) = matchStr s
-               >>     parseParens parseBoolExp
-              `mplus` parseLitBool
-              `mplus` parseBoolVar
-               >>=    (return . UnaryBoolOp cons)
+parseU (s, cons) = fmap (UnaryBoolOp cons)(matchStr s >>
+                                          parseParens parseBoolExp
+                                          `mplus` parseLitBool
+                                          `mplus` parseBoolVar)
 
 
 -- Parser for a binary boolean operator

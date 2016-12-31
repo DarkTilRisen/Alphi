@@ -1,8 +1,8 @@
+
 Command OpenMBot Stop
 
 While True Begin
   Ndistance Is Command Ultra Stop
-
 
   If Ndistance Gt 40 Begin
     Command MotorL 70 Stop

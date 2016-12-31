@@ -102,8 +102,8 @@ sensorL             = "SensorL"
 sensorR             = "SensorR"
 ultra               = "Ultra"
 device              = "Device"
-openBot            = "OpenMBot"
-closeBot           = "CloseMBot"
+openBot             = "OpenMBot"
+closeBot            = "CloseMBot"
 
 --types--
 num                 = 'N'
@@ -127,8 +127,9 @@ lt                  = "Lt"
 eq                  = "Eq"
 
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
-            , command, print', motorR, motorL, sensorL , sensorR, ultra
-            , true, false, if', add, sub, mul, div', mod', not', and', or', gt, lt, eq]
+            , command, print', motorR, motorL, sensorL , sensorR, ultra, true
+            , false, if', add, sub, mul, div', mod', not', and', or', gt, lt
+            , eq]
 
 orderBNumOp         =  [[(mul,  Mul),
                          (div', Div),
