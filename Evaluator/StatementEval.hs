@@ -39,6 +39,9 @@ evalCommand Print (BExp e)       = evalPrint (evalBoolExp e) getBool
 evalCommand Print (NExp e)       = evalPrint (evalNumExp e)  getNum
 evalCommand MotorRight e         = evalMotor e MotorR
 evalCommand MotorLeft  e         = evalMotor e MotorL
+evalCommand Data.Base.Led1 e     = evalLed   e Robot.Base.Led1
+evalCommand Data.Base.Led2 e     = evalLed   e Robot.Base.Led2
+
 
 -- Evaluate input
 evalInput' :: (Device -> IO a) -> (a -> ReturnValue) -> MyState
@@ -49,7 +52,16 @@ evalPrint e f = e >>= (liftIO . print . f) >> return Void
 
 -- evaluate motor commands
 evalMotor :: Exp -> Motor ->  MyState
-evalMotor e m = do { x <- evalExp e; d <- returnDevice;liftIO (move ((floor .getNum) x) m (getDevice d)); return Void }
+evalMotor e m = do { x <- evalExp e;
+                     d <- returnDevice;
+                     liftIO (move ((floor . getNum) x) m (getDevice d));
+                     return Void }
+
+evalLed :: Exp -> Led -> MyState
+evalLed e l = do { x <- evalExp e;
+                   d <- returnDevice;
+                   liftIO (led ((floor . getNum) x) l (getDevice d));
+                   return Void }
 
 -- Evaluate structures like while and if
 evalStruct :: Exp -> Statement -> MyState -> MyState

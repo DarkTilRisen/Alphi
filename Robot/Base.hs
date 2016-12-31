@@ -28,6 +28,20 @@ move s m d | m == MotorR && s > 0 = move' s stops
            | otherwise            = error Data.impossibleState
           where move' s x = sendCommand d $ setMotor (find m motors) s x
 
+{-
+1 -> Red
+2 -> Green
+3 -> Blue
+-}
+
+led :: Int -> Led -> Device -> IO()
+led x l d | x == 0    = f 0   0   0
+          | x == 1    = f 100 0   0
+          | x == 2    = f 0   100 0
+          | x == 3    = f 0   0   100
+          | otherwise = error Data.impossibleState
+          where f r g b =  sendCommand d $ setRGB (find l leds) b g r
+
 --Read out the ultrasonic sensor and convert it to a IO(Double) --
 readUltra :: Device -> IO Double
 readUltra d = fmap float2Double (readUltraSonic d)

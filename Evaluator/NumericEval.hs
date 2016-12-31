@@ -15,8 +15,14 @@ import Evaluator.Util
 evalNumExp :: NumericExp -> MyState
 evalNumExp (LitDouble x)             = (return . Num ) x
 evalNumExp (LitInteger x)            = (return . Num . fromIntegral) x
-evalNumExp (BinaryNumericOp Add x y) = evalBOp (+) x y evalNumExp getNum Num
-evalNumExp (BinaryNumericOp Sub x y) = evalBOp (-) x y evalNumExp getNum Num
-evalNumExp (BinaryNumericOp Mul x y) = evalBOp (*) x y evalNumExp getNum Num
-evalNumExp (BinaryNumericOp Div x y) = evalBOp (/) x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Add x y) = evalBOp (+)  x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Sub x y) = evalBOp (-)  x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Mul x y) = evalBOp (*)  x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Div x y) = evalBOp (/)  x y evalNumExp getNum Num
+evalNumExp (BinaryNumericOp Mod x y) = evalBOp mod'' x y evalNumExp getNum Num
 evalNumExp (NVar x)                  = state $ \s -> (find x s,s)
+
+
+-- what a stupid hack
+mod'' :: Double -> Double -> Double
+mod'' x y  = fromIntegral $  mod (round x ) (round y)

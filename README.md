@@ -1,6 +1,7 @@
 # Alphi
 
-Language that only uses alphanumerical characters.
+Language that only uses alphanumerical characters and whitespace.
+
 
 #Backus–Naur form
 

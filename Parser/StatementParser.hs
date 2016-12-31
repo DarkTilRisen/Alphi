@@ -56,3 +56,5 @@ parseStatement = base `chainl1` return Statements
                     `mplus` parseOUTCommand  print'    Print
                     `mplus` parseOUTCommand  motorR    MotorRight
                     `mplus` parseOUTCommand  motorL    MotorLeft
+                    `mplus` parseOUTCommand  led1      Led1
+                    `mplus` parseOUTCommand  led2      Led2

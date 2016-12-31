@@ -1,1 +1,19 @@
-Nx Is 4 Add 4 Sub 4 Sub 4 Mul 5 Stop commentOpen commentClose
+Command OpenMBot Stop
+
+Ncount Is 0 Stop
+While True  Begin
+
+  If Ncount Mod 2 Eq 0 Begin
+    Command Led1 1 Stop
+    Command Led2 3 Stop
+  End
+
+  If Ncount Mod 2 Eq 1 Begin
+    Command Led1 3 Stop
+    Command Led2 1 Stop
+  End
+
+  Ncount Is Ncount Add 1 Stop
+
+End
+Command CloseMBot Stop
