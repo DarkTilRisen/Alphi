@@ -6,17 +6,20 @@ year ::  2016-2017
 
 ## Inhoud
 
-1. Inleiding  
-
+1. Inleiding
 2. Syntax (BNF)
-
 3. Semantiek
-
 4. VoorbeeldProgramma's
-
+  1. Demo_police
+  2. Demo_line
+  3. Demo_ultra
 5. Implementatie
-
+  1. Parsen
+  2. Evalueren
 6. Conclusie
+  1. Algemeen
+  2. Definitie
+  3. Implementatie
 
 
 ## Inleiding
@@ -33,6 +36,7 @@ Hierna worden de implementatie aspecten besproken.
 
 
 ## Syntax
+```
 Pgm ∶∶= Stmt
 
 Stmt   ∶∶= <Var> "Is" <Exp> "Stop"
@@ -51,6 +55,7 @@ NExp   ∶∶= <Num>
          ∣ <NExp> "Sub" <NExp>
          | <NExp> "Mul" <NExp>
          | <NExp> "Div" <NExp>
+         | 
 
 BExp   ∶∶= <Bool>
          | <BVar>
@@ -82,11 +87,13 @@ NVar    ::= "N"<Letter>+
 BVar    ::= "B"<Letter>+
 Letter  ::= ["a"-"Z"]
 
+```
+
 
 ## Semantiek
 
 1. Expressies
-
+  1. Numeric
 
 
 

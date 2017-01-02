@@ -16,10 +16,10 @@ parseInt = fmap read parseDigits
 
 -- Parser for doubles
 parseDouble :: Parser Double
-parseDouble = do { x <- parseDigits;
-                   parseString floatSep;
-                   y <- parseDigits;
-                   return (read (x ++ "." ++ y) :: Double)}
+parseDouble = do  x <- parseDigits;
+                  parseString floatSep;
+                  y <- parseDigits;
+                  return (read (x ++ "." ++ y) :: Double)
 
 -- Parser for an numerical variable
 parseNumVar :: Parser NumericExp
