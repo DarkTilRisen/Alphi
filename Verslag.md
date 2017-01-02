@@ -1,20 +1,25 @@
-## Alphi
-Naam:: Lissens
-Voornaam:: Tobiah
-Richting:: 2de bachelor Informatica
+# Alphi
+Naam:: Lissens  
+Voornaam:: Tobiah  
+Richting:: 2de bachelor Informatica  
 year ::  2016-2017
 
-#Inhoud
+## Inhoud
 
-1. Inleiding
+1. Inleiding  
+
 2. Syntax (BNF)
+
 3. Semantiek
+
 4. VoorbeeldProgramma's
+
 5. Implementatie
+
 6. Conclusie
 
 
-#Inleiding
+## Inleiding
 
 In dit project wordt de eenvoudige programmeertaal Alphi opgesteld.
 Hierbij is het de bedoeling verschillende basiselementen van een imperatieve programmeertalen te implementeren.
@@ -27,7 +32,7 @@ Hierna worden de implementatie aspecten besproken.
 
 
 
-#Syntax
+## Syntax
 Pgm ∶∶= Stmt
 
 Stmt   ∶∶= <Var> "Is" <Exp> "Stop"
@@ -78,7 +83,7 @@ BVar    ::= "B"<Letter>+
 Letter  ::= ["a"-"Z"]
 
 
-#Semantiek
+## Semantiek
 
 1. Expressies
 
@@ -108,16 +113,16 @@ Letter  ::= ["a"-"Z"]
 
 
 
-#Programma's
+## Programma's
 Korte beschrijvingen van het programma
-1) demo_police.alp
+1. demo_police.alp
    Start teller.
    Indien teller even zet Led1 op rood en led 2 op blauw.
    Indien teller oneven zet led2 op rood en led1 op blauw.
    Verhoog Teller met 1
    Begin bij stap 2.
 
-2) demo_line.alp
+2. demo_line.alp
   Lees beide lichtsensoren uit.
   Indien beide sensoren Zwart zien rij de robot rechtdoor.
   Indien links wit ziet en rechts zwart draai alleen de linker motor.
@@ -125,23 +130,20 @@ Korte beschrijvingen van het programma
   Indien Beide wit zien rij achteruit.
   Begin terug bij stap 1.
 
-3) demo_ultra.alp
+3. demo_ultra.alp
   Lees Ultrasonesensor uit.
   Indien afstand Groter dan 40 rij rechtdoor.
   Indien afstand Kleiner dan 40 draai de linkermotor vooruit en de rechtermotor achteruit.
   Begin terug bij stap 1.
 
-#Implementatie
-5. Implementatie: Geef een overzicht van de belangrijke punten van de implementatie. Refereer naar
-de lijnnummers in je code. Kleine stukjes code die heel belangrijk zijn kan je ook inline in je rapport
-plaatsen. Het is echter niet de bedoeling dat je verslag een kopie van je broncode is.
+## Implementatie
 
 1. Parsen
 
 2. Evalueren
 
 
-#Conclusie
+## Conclusie
 1. Algemeen:
 Een alphanumerical taal maken leek in het begin leuk. Dit bracht echter enkele nadelen met zich mee.
 Het groote nadeel hieraan is dat je geen special karakters hebt die kunnen instaan voor bv het einde van een statement, haakjes en assignatie.
