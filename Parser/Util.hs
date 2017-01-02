@@ -56,9 +56,9 @@ parseSpaceAndComments = parseSpace parseComments
 
 -- Creates a new parser that ignores newLines and whitespace
 parseTrailingSpace :: Parser a -> Parser a
-parseTrailingSpace p = parseSpace p `mplus` do { x <- parseSpace p;
-                                                parseSpaceAndComments;
-                                                return x }
+parseTrailingSpace p = parseSpace p `mplus` do  x <- parseSpace p
+                                                parseSpaceAndComments
+                                                return x 
 
 
 parseLeadingSpace ::  Parser String

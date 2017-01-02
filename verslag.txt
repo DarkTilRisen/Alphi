@@ -1,47 +1,59 @@
+Naam:: Lissens
+Voornaam:: Tobiah
+Richting:: 2de bachelor Informatica
+year ::  2016-2017
+
 #Inleiding
 
-In dit project word de eenvoudige programmeertaal Alphi opgesteld.
-Hierbij is het de bedoeling verschillende basiselementen van imperatieve programmeertalen te implementeren.
+In dit project wordt de eenvoudige programmeertaal Alphi opgesteld.
+Hierbij is het de bedoeling verschillende basiselementen van een imperatieve programmeertalen te implementeren.
 zoals bv: toekenning, variablen, volgorde van bewerkingen, while statment.
-De taal Alphi maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
+De taal die hieronder wordt uitgewerkt heet Alphi wat staat voor alphanumerical.
+Deze taal maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
+Eerst zal de syntax worden vastgelegd.
+Vervolgens wordt de semantiek vastgelegd en worden voorbeeld programma's gegeven.
+Hierna worden de implementatie aspecten besproken.
+
+
+
+
 
 
 #Syntax
-
 Pgm ∶∶= Stmt
 
-Stmt ∶∶= <Var> "Is" <Exp> "Stop"
-     | "Command" <Output> <Exp> "Stop"
-     ∣ <Stmt> <Stmt>
-     ∣ "If" <Exp> "Begin" Stmt "End"
-     ∣ "While" <Exp> "Begin" Stmt
+Stmt   ∶∶= <Var> "Is" <Exp> "Stop"
+        | "Command" <Output> <Exp> "Stop"
+        ∣ <Stmt> <Stmt>
+        ∣ "If" <Exp> "Begin" Stmt "End"
+        ∣ "While" <Exp> "Begin" Stmt
 
-Exp  ::= <BExp> | <NExp> | "Command" <Input>
+Exp    ::= <BExp>
+         | <NExp>
+         | "Command" <Input>
 
-NExp ∶∶= <Num>
-       ∣ <NVar>
-       |
-       ∣ <NExp> "Add" <NExp>
-       ∣ <NExp> "Sub" <NExp>
-       | <NExp> "Mul" <NExp>
-       | <NExp> "Div" <NExp>
+NExp   ∶∶= <Num>
+         ∣ <NVar>
+         ∣ <NExp> "Add" <NExp>
+         ∣ <NExp> "Sub" <NExp>
+         | <NExp> "Mul" <NExp>
+         | <NExp> "Div" <NExp>
 
-BExp ∶∶= <Bool>
-       | <BVar>
-       | <Bool>
-       ∣ <NExp> "Gt" <NExp>
-       | <NExp> "Lt" <NExp>
-       | <NExp> "Eq" <NExp>
-       ∣       "Not" <BExp>
-       ∣ <BExp> "And" <BExp>
-       | <BExp> "Or" <BExp>
+BExp   ∶∶= <Bool>
+         | <BVar>
+         ∣  "Not" <BExp>
+         ∣ <NExp> "Gt" <NExp>
+         | <NExp> "Lt" <NExp>
+         | <NExp> "Eq" <NExp>
+         ∣ <BExp> "And" <BExp>
+         | <BExp> "Or" <BExp>
 
 
-Input ::= "OpenMBot"
-      | "CloseMBot"
-      | "SensorR"
-      | "SensorL"
-      | "Ultra"
+Input  ::= "OpenMBot"
+         | "CloseMBot"
+         | "SensorR"
+         | "SensorL"
+         | "Ultra"
 
 Output ::= "Print"
          | "MotorR"
@@ -96,9 +108,23 @@ plaatsen. Het is echter niet de bedoeling dat je verslag een kopie van je bronco
 
 
 #Conclusie
+1. Algemeen:
+Een alphanumerical taal maken leek in het begin leuk. Dit bracht echter enkele nadelen met zich mee.
+Het groote nadeel hieraan is dat je geen special karakters hebt die kunnen instaan voor bv het einde van een statement, haakjes en assignatie.
+Verder wordt de taal ook Enorm rap onduidelijk en on leesbaar doordat er weinig tot geen onderscheid gemaakt kan worden tussen keywords en Expressies of variablen.
+
+
+2. Syntax definitie:
+Hierbij zijn er soms rare definities ingeslopen zoals
+
+
+3. Implementatie:
+De parseLibrary is vrij onduidelijk geschreven er onbreekt een mooie volgbare hierachy die bv wel aanwezig is bij het evalueren.
+Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen En er op ieder moment rekening met whitespace en commentaar gehouden moest worden.
+
+
 6. Conclusie : Geef een overzicht van wat je gerealiseerd hebt en hoe je de bestaande code eventueel
 nog zou kunnen verbeteren.
-
 
 
 

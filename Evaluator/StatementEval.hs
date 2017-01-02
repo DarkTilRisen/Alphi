@@ -37,10 +37,10 @@ evalStatement Empty              = return Void
 evalCommand :: OUTCommand -> Exp -> MyState
 evalCommand Print (BExp e)       = evalPrint (evalBoolExp e) getBool
 evalCommand Print (NExp e)       = evalPrint (evalNumExp e)  getNum
-evalCommand MotorRight e         = evalMotor e MotorR
-evalCommand MotorLeft  e         = evalMotor e MotorL
-evalCommand Data.Base.Led1 e     = evalLed   e Robot.Base.Led1
-evalCommand Data.Base.Led2 e     = evalLed   e Robot.Base.Led2
+evalCommand MotorRight e         = evalRobotFunction e MotorR move
+evalCommand MotorLeft  e         = evalRobotFunction e MotorL move
+evalCommand Data.Base.Led1 e     = evalRobotFunction e Robot.Base.Led1 led
+evalCommand Data.Base.Led2 e     = evalRobotFunction e Robot.Base.Led2 led
 
 
 -- Evaluate input
@@ -50,18 +50,11 @@ evalInput' f c = fmap c (returnDevice >>= liftIO . f . getDevice)
 evalPrint :: (Show a) => MyState -> (ReturnValue -> a) -> MyState
 evalPrint e f = e >>= (liftIO . print . f) >> return Void
 
--- evaluate motor commands
-evalMotor :: Exp -> Motor ->  MyState
-evalMotor e m = do { x <- evalExp e;
-                     d <- returnDevice;
-                     liftIO (move ((floor . getNum) x) m (getDevice d));
-                     return Void }
-
-evalLed :: Exp -> Led -> MyState
-evalLed e l = do { x <- evalExp e;
-                   d <- returnDevice;
-                   liftIO (led ((floor . getNum) x) l (getDevice d));
-                   return Void }
+evalRobotFunction :: Integral c => Exp -> t -> (c -> t -> Device -> IO a) -> StateT (Env ReturnValue) IO ReturnValue
+evalRobotFunction e l f = do x <- evalExp e
+                             d <- returnDevice;
+                             liftIO (f ((floor . getNum) x) l (getDevice d))
+                             return Void
 
 -- Evaluate structures like while and if
 evalStruct :: Exp -> Statement -> MyState -> MyState
