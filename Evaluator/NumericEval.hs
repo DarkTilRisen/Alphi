@@ -25,4 +25,4 @@ evalNumExp (NVar x)                  = state $ \s -> (find x s,s)
 
 -- what a stupid hack
 mod'' :: Double -> Double -> Double
-mod'' x y  = fromIntegral $  mod (round x ) (round y)
+mod'' x y  = fromIntegral $ mod (round x ) (round y)

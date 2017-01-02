@@ -21,4 +21,4 @@ eval = flip (runStateT . evalStatement . parseAll) emptyEnv
 
 --run the parser and evaluator from a given file.
 main :: IO ()
-main = readFile "AlphiExamples/demo_line.alp" >>= eval >> print "done"
+main = readFile "AlphiExamples/demo_exp.alp" >>= eval >> print "done"

@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00f70aff-21f5-4e49-a3d1-e110ec6d5e5a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Parser/NumericParser.hs" afterPath="$PROJECT_DIR$/Parser/NumericParser.hs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Evaluator/NumericEval.hs" afterPath="$PROJECT_DIR$/Evaluator/NumericEval.hs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.hs" afterPath="$PROJECT_DIR$/Main.hs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Verslag.md" afterPath="$PROJECT_DIR$/Verslag.md" />
     </list>
     <ignored path="projectFunctioneel.iws" />
@@ -26,8 +27,8 @@
       <file leaf-file-name="addLineNumbers.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/addLineNumbers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+            <state relative-caret-position="667">
+              <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding>
                 <element signature="e#23#32#0" expanded="true" />
               </folding>
@@ -352,8 +353,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/addLineNumbers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+        <state relative-caret-position="667">
+          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
             <element signature="e#23#32#0" expanded="true" />
           </folding>

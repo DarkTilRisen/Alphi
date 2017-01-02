@@ -4,8 +4,7 @@ Voornaam:: Tobiah
 Richting:: 2de bachelor Informatica  
 year ::  2016-2017
 
-## Inhoud
-
+## Inhoud  
 1. Inleiding
 2. Syntax (BNF)
 3. Semantiek
@@ -14,13 +13,17 @@ year ::  2016-2017
   2. Demo_line
   3. Demo_ultra
 5. Implementatie
-  1. Parsen
-  2. Evalueren
+  1. Data Definitie
+  2. Parsen
+  3. Evalueren
+  4. Robot Lib
 6. Conclusie
   1. Algemeen
   2. Definitie
   3. Implementatie
-
+7. Index
+  1. AlphiExamples
+  2. Src
 
 ## Inleiding
 
@@ -55,7 +58,7 @@ NExp   ∶∶= <Num>
          ∣ <NExp> "Sub" <NExp>
          | <NExp> "Mul" <NExp>
          | <NExp> "Div" <NExp>
-         | 
+         | "Open" NExp "Close"
 
 BExp   ∶∶= <Bool>
          | <BVar>
@@ -65,6 +68,7 @@ BExp   ∶∶= <Bool>
          | <NExp> "Eq" <NExp>
          ∣ <BExp> "And" <BExp>
          | <BExp> "Or" <BExp>
+         | "Open" BExp "Close"
 
 Input  ::= "OpenMBot"
          | "CloseMBot"
@@ -81,7 +85,7 @@ Output ::= "Print"
 Bool    ∶∶= "True" | "False"
 Num     ∶∶=  Int | Float
 Int     ::= ["0"-"9"]
-Float   ::= <Int>"Float"<Int>
+Float   ::= <Int>"Point"<Int>
 Var     ∶∶= NVar | BVar
 NVar    ::= "N"<Letter>+
 BVar    ::= "B"<Letter>+
@@ -94,11 +98,32 @@ Letter  ::= ["a"-"Z"]
 
 1. Expressies
   1. Numeric
+    - Volgorde van bewerkingen
+    Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geevalueerd.
+    Hoe hoger het niveau hoe eerder ze geivalueerd worden
+
+    Niveau 1(literalen)  
+    Float, Int
+    Vb: 10Point4, 4
+
+    Niveau 2  
+    Add, Sub
+
+    Niveau 3  
+    Mul, Div, Mod
+
+    Niveau 4 (haakjes)  
+    Open Close
 
 
+    vb: 4 Sub 4 Mul 4 = -12      
+        4 Mul 4 Mul 2 Sub 3 = 29  
 
+  2. Boolean
+    Volgorde Van bewerkingen
 
-
+    Niveau 1
+    True, False
 
 
 
@@ -108,13 +133,7 @@ Letter  ::= ["a"-"Z"]
 
 
 
-
-
-
-3. Extra
-
-
-
+3. Commands
 
 
 
@@ -171,6 +190,21 @@ Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen 
 
 
 
-#Appendix Broncode:
-Geef de volledige code van je project, zorg ervoor dat hierbij lijnnummers
-staan zodat je hier makkelijk naar kan refereren.
+## Appendix Broncode:
+
+### Inhoud  
+1. AlphiExamples
+  1.   
+  2. demo_line.alp
+2. Src
+  1.
+  2.
+  3.
+  4.
+  5.
+  6.
+  7.
+  8.
+  9.
+  10.
+  11.  
