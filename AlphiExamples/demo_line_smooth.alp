@@ -49,7 +49,7 @@ While True Begin
       Command MotorL 0 Stop
       Command MotorR 80 Stop
     End
-    
+
     Bprior Is True Stop
   End
 End

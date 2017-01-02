@@ -1,21 +1,29 @@
+## Alphi
 Naam:: Lissens
 Voornaam:: Tobiah
 Richting:: 2de bachelor Informatica
 year ::  2016-2017
 
+#Inhoud
+
+1. Inleiding
+2. Syntax (BNF)
+3. Semantiek
+4. VoorbeeldProgramma's
+5. Implementatie
+6. Conclusie
+
+
 #Inleiding
 
 In dit project wordt de eenvoudige programmeertaal Alphi opgesteld.
 Hierbij is het de bedoeling verschillende basiselementen van een imperatieve programmeertalen te implementeren.
-zoals bv: toekenning, variablen, volgorde van bewerkingen, while statment.
+zoals bv: toekenning, variablen en volgorde van bewerkingen.
 De taal die hieronder wordt uitgewerkt heet Alphi wat staat voor alphanumerical.
 Deze taal maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
 Eerst zal de syntax worden vastgelegd.
 Vervolgens wordt de semantiek vastgelegd en worden voorbeeld programma's gegeven.
 Hierna worden de implementatie aspecten besproken.
-
-
-
 
 
 
@@ -48,7 +56,6 @@ BExp   ∶∶= <Bool>
          ∣ <BExp> "And" <BExp>
          | <BExp> "Or" <BExp>
 
-
 Input  ::= "OpenMBot"
          | "CloseMBot"
          | "SensorR"
@@ -72,6 +79,29 @@ Letter  ::= ["a"-"Z"]
 
 
 #Semantiek
+
+1. Expressies
+
+
+
+
+
+
+
+
+
+
+2. Statements
+
+
+
+
+
+
+
+3. Extra
+
+
 
 
 
@@ -106,6 +136,10 @@ Korte beschrijvingen van het programma
 de lijnnummers in je code. Kleine stukjes code die heel belangrijk zijn kan je ook inline in je rapport
 plaatsen. Het is echter niet de bedoeling dat je verslag een kopie van je broncode is.
 
+1. Parsen
+
+2. Evalueren
+
 
 #Conclusie
 1. Algemeen:
@@ -115,7 +149,8 @@ Verder wordt de taal ook Enorm rap onduidelijk en on leesbaar doordat er weinig 
 
 
 2. Syntax definitie:
-Hierbij zijn er soms rare definities ingeslopen zoals
+Hierbij zijn er soms onlogische samenstellingen mogelijk zoals Numerical Expression in de IfConditie of WhileStatement
+Hierdoor moet dit opgevangen worden tijdens het evalueren dit is ongewild.
 
 
 3. Implementatie:
@@ -123,10 +158,10 @@ De parseLibrary is vrij onduidelijk geschreven er onbreekt een mooie volgbare hi
 Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen En er op ieder moment rekening met whitespace en commentaar gehouden moest worden.
 
 
-6. Conclusie : Geef een overzicht van wat je gerealiseerd hebt en hoe je de bestaande code eventueel
-nog zou kunnen verbeteren.
 
 
 
-7. Appendix Broncode: Geef de volledige code van je project, zorg ervoor dat hierbij lijnnummers
+
+#Appendix Broncode:
+Geef de volledige code van je project, zorg ervoor dat hierbij lijnnummers
 staan zodat je hier makkelijk naar kan refereren.
