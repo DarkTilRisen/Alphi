@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00f70aff-21f5-4e49-a3d1-e110ec6d5e5a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Evaluator/NumericEval.hs" afterPath="$PROJECT_DIR$/Evaluator/NumericEval.hs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.hs" afterPath="$PROJECT_DIR$/Main.hs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Verslag.md" afterPath="$PROJECT_DIR$/Verslag.md" />
     </list>
     <ignored path="projectFunctioneel.iws" />

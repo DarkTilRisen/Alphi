@@ -98,6 +98,7 @@ Letter  ::= ["a"-"Z"]
 
 1. Expressies
   1. Numeric
+```
     - Volgorde van bewerkingen
     Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geevalueerd.
     Hoe hoger het niveau hoe eerder ze geivalueerd worden
@@ -113,22 +114,38 @@ Letter  ::= ["a"-"Z"]
     Mul, Div, Mod
 
     Niveau 4 (haakjes)  
-    Open Close
-
+    Open Close  
 
     vb: 4 Sub 4 Mul 4 = -12      
         4 Mul 4 Mul 2 Sub 3 = 29  
-
+```
   2. Boolean
+```
     Volgorde Van bewerkingen
 
     Niveau 1
     True, False
 
+    Niveau 2
+    And, Or
 
+    Niveau 3
+    Gt, Lt , Eq
 
+    Niveau 4
+    Not
 
-2. Statements
+    Niveau 5 (Haakjes)
+
+    vb: True And True            = True
+        4 Lt 5 And False         = False
+        4 Lt 5 And True          = True
+        4 Lt 5 And False Or True = True
+```
+
+2. Statements  
+```
+  While
 
 
 
