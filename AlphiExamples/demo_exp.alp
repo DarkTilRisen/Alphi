@@ -1,8 +1,0 @@
-Nvar Is 4 Add 4 Mul 4 Div 4 Stop
-
-
-Bar Is 4 Gt Nvar Or False And True Stop
-
-
-Command Print Bar Stop
-Command Print Nvar Stop
