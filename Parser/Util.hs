@@ -41,16 +41,28 @@ parseString (x:xs)   = do y <- token x
 
 parseAlpha :: Parser String
 parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
-    where isKeyword x =  if x `elem` keywords then mzero else return x
+    where isKeyword x | x `elem` keywords = mzero
+                      |  otherwise        = return x
 
 -- Parser that ignores whiteSpace and newlines
 parseWhiteSpace :: Parser String
-parseWhiteSpace = plus $ spot isSpace <|> token '\n' 
+parseWhiteSpace = plus $ spot isSpace <|> token '\n'
+
+parseSpace :: Parser a -> Parser a
+parseSpace = (=<<) $ \x ->  parseWhiteSpace >> return x
+
+parseSpaceAndComments :: Parser String
+parseSpaceAndComments = parseSpace parseComments
 
 -- Creates a new parser that ignores newLines and whitespace
 parseTrailingSpace :: Parser a -> Parser a
-parseTrailingSpace p = whitespace p `mplus` (do {x <- whitespace p ; whitespace parseComments; return x })
-            where whitespace  = (=<<) $ \x ->  parseWhiteSpace >> return x
+parseTrailingSpace p = parseSpace p `mplus` do {x <- parseSpace p;
+                                                parseSpaceAndComments;
+                                                return x }
+
+
+--parseLeadingSpace :: Parser a -> Parser a
+--parseLeadingSpace p = parseSpace p `mplus`
 
 
 -- Match a certain keyword
@@ -96,4 +108,7 @@ parseFromTuple' f xs  = foldl1 mplus $ fmap f xs
 -- creates a new parser from a parser and a parser of an operator
 chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
 chainl1 p op = p >>= rest
-  where rest a = do {f <- op;b <- p;rest (f a b)} `mplus` return a
+  where rest a = do f <- op
+                    b <- p
+                    rest (f a b)
+                    `mplus` return a
