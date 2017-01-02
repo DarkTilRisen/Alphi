@@ -8,10 +8,10 @@ type Env a            = [(Var, a)]                              -- environment d
 type MyState          = StateT (Env ReturnValue) IO ReturnValue -- rename this long type
 emptyEnv              = []                                      -- create empty environment
 
--- variables that can be stored in the environment
-data ReturnValue      = Num Double
+-- variables that can be stored in the environment and returned by a mystate
+data ReturnValue      = Num     Double
                       | Boolean Bool
-                      | Dev      Device
+                      | Dev     Device
                       | Void
 
 -- little numerical language
@@ -29,13 +29,14 @@ data NumericBinaryOp  = Add
                       | Mod
                       deriving (Show, Eq)
 
--- little boolean language based upon the numerical language
+-- little boolean language based using the numerical language
 data BooleanExp       = LitBool         Bool
                       | BVar            Var
                       | UnaryBoolOp     UnaryBoolOp     BooleanExp
                       | BinaryBoolOp    BinaryBoolOp    BooleanExp BooleanExp
                       | BinaryAltBoolOp BinaryAltBoolOp NumericExp NumericExp
                       deriving (Show, Eq)
+
 -- unary operator for boolean expressions
 data UnaryBoolOp     = Not deriving (Show, Eq)
 
@@ -65,6 +66,7 @@ data Statement       = Empty
                      | Output       OUTCommand   Exp
                       deriving (Show, Eq)
 
+-- Output -> results in an action
 data OUTCommand      = Print
                      | MotorRight
                      | MotorLeft
@@ -72,7 +74,7 @@ data OUTCommand      = Print
                      | Led2
 
                       deriving (Show, Eq)
-
+-- Input -> results in an
 data INCommand       = LineLeft
                      | LineRight
                      | ReadUltra
@@ -108,18 +110,18 @@ openBot             = "OpenMBot"
 closeBot            = "CloseMBot"
 
 --types--
-num                 = 'N'
-bool                = 'B'
+num                 = 'N' -- eq double
+bool                = 'B' -- eq bool
 
 -- binary numeric operators --
-add                 = "Add"
-sub                 = "Sub"
-mul                 = "Mul"
-div'                = "Div"
-mod'                = "Mod"
+add                 = "Add" --eq +
+sub                 = "Sub" --eq -
+mul                 = "Mul" --eq *
+div'                = "Div" --eq /
+mod'                = "Mod" --eq %
 
 -- unary boolean operators --
-not'                = "Not"
+not'                = "Not" -- eq !
 
 -- binary boolean operators --
 and'                = "And"
@@ -128,6 +130,7 @@ gt                  = "Gt"
 lt                  = "Lt"
 eq                  = "Eq"
 
+-- keywords that cannont be used as variables
 keywords = [parOpen, parClosed, bracketsOpen, bracketsClosed, assign, floatSep
             , command, print', motorR, motorL, sensorL , sensorR, ultra, true
             , false, if', add, sub, mul, div', mod', not', and', or', gt, lt
@@ -144,7 +147,7 @@ uBoolOp             = [(not', Not)]
 binaryBoolOp        = [(and', And), (or', Or)]
 binaryAltBoolOp     = [(gt, GreaterThan), (lt, SmallerThan), (eq, Equals)]
 
--- erros
+-- errors
 noParse             = "No parse was found!!!!!!"
 ambiguousParse      = "Parse is ambiguous!!!!!!"
 evalerror           = "something went wrong when evaluating"

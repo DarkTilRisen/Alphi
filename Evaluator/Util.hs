@@ -4,11 +4,13 @@ import Data.Base
 import Data.Maybe
 import System.HIDAPI hiding (error)
 
+-- evaluate 2 expressions apply a function and return a MyState with the evaluated expression as result
 evalBOp :: Monad m => (t3 -> t3 -> t2) -> t -> t -> (t -> m t1) -> (t1 -> t3) -> (t2 -> b) -> m b
 evalBOp f x y e g c = do x' <- e x
                          y' <- e y
                          return (c (f (g x') (g y')))
 
+-- find a value in a environment
 find ::(Eq a) => a -> [(a,b)] -> b
 find x env = fromMaybe (error varNotFound) (lookup x env)
 

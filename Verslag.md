@@ -271,6 +271,8 @@ Korte beschrijvingen van het programma
 
   2. Util.hs
   Hier werden alle Parser functies geimplementeerd die nergens anders een plaats hadden.
+  
+
 
   3. NumericalParser.hs
   Hier staan alle numerical expressie parsers.
@@ -282,23 +284,44 @@ Korte beschrijvingen van het programma
   Hier staan alle Statemenparsers en dit is dus eveneens de programma parser.
 
 
+
 2. Evalueren (Evaluator)
   Bij het evalueren word er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit. Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variablen mappen naar waarden. zodat we later de waardes van variablen kunnnen opvragen. De State zal ook return waardes van expressies teruggeven.
 
+  1. NumericEval.hs / BoolEval.bs
 
+    Het idee Hierbij is te pattern matchen op de datastructuur En op deze manier kunnen we elk geval appart behandelen.
+    Voor functies die veel voorkomen word een abstractere versie aangemaakt in Evaluator.Util.hs
+    een mooi voorbeeld hiervan is de functie EvalBOp zie Evaluator.Util.hs line ?.
+    EvalBOp is een functie die 6 argumenten neemt.
 
+    1) Functie die 2 a's binnen neemt en een a teruggeeft
+    2) Expressie1 een expressie
+    3) Expressie2 een expressie
+    4) Evaluator1
+    5) Unwrapper (m a -> a) functie die een return value unwrapped
+    6) Constructor Wrapper constructor
+
+    Deze functie zal de 2 expressies uitrekenen de return waarden daarvan uitpakken de functie erop toepassen en vervolgens deze terug wrappen en in een MyState steken.
+
+    2. StatementEval:
+    De StatementEval werkt op dezelfde manier als NumericEval en BoolEval.
+    Maar bij het evalueren moet in onze statemonad aan IO gedaan worden.
+    Dit omdat we met onze robot willen kunnen communiceren.
+    De functies evalInput'(line ?), evalPrint (line ? ), evalRobotFunction (line ?) maken om dit te kunnen doen gebruik van liftIO.
 
 
 3. RobotLib (Robot.Base.hs)
   Hier werd verder gewerkt op de gegeven library zodat er intuitiver gewerkt kan worden gewerkt met de MBot
-  (Zie Robot.Base.hs line ?)
+  En zodat er een mooi scheiding kan blijven bestaan tussen de robotaansturing en de taal.
+
   Een Intressante functie is de move functie hierbij wordt een device snelheid en motor meegegeven
-  zodat de motor makkelijker kan aangestuurd worden.
+  zodat de motor makkelijker kan aangestuurd worden. De Implementatie kan gevonden worden onder Robot.Base.hs line ? .
 
 ## Conclusie
 1. Algemeen:
 Een alphanumerical taal maken leek in het begin leuk. Dit bracht echter enkele nadelen met zich mee.
-Het groote nadeel hieraan is dat je geen special karakters hebt die kunnen instaan voor bv het einde van een statement, haakjes en assignatie.
+Het groote nadeel hieraan is dat je geen speciale karakters hebt die kunnen instaan voor bv het einde van een statement, haakjes etc.
 Verder wordt de taal ook Enorm rap onduidelijk en on leesbaar doordat er weinig tot geen onderscheid gemaakt kan worden tussen keywords en Expressies of variablen.
 
 2. Syntax definitie:

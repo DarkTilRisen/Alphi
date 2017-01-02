@@ -6,13 +6,15 @@ import Evaluator.Util
 import Evaluator.NumericEval
 
 
--- evaluate boolean expressions
+-- Evaluate boolean expressions
+-- Uses evalNumExp for binary operators this will evaluate both expressions
+-- apply the given function and return a value wrapped in a MyState
 evalBoolExp :: BooleanExp -> MyState
-evalBoolExp (LitBool x)                          = return (Boolean x)
-evalBoolExp (UnaryBoolOp Not x)                  = fmap (Boolean . not . getBool) (evalBoolExp x)
-evalBoolExp (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExp getBool Boolean
+evalBoolExp (LitBool x)                          = return (Boolean x) -- Just return the boolean in a MyState
+evalBoolExp (UnaryBoolOp Not x)                  = fmap (Boolean . not . getBool) (evalBoolExp x) -- return the negation of the expression wrapped in MyState
+evalBoolExp (BinaryBoolOp And x y)               = evalBOp (&&) x y evalBoolExp getBool Boolean --
 evalBoolExp (BinaryBoolOp Or  x y)               = evalBOp (||) x y evalBoolExp getBool Boolean
 evalBoolExp (BinaryAltBoolOp GreaterThan x y)    = evalBOp (>)  x y evalNumExp getNum Boolean
 evalBoolExp (BinaryAltBoolOp SmallerThan x y)    = evalBOp (<)  x y evalNumExp getNum Boolean
 evalBoolExp (BinaryAltBoolOp Equals x y )        = evalBOp (==) x y evalNumExp getNum Boolean
-evalBoolExp (BVar x)                             = state $ \s -> (find x s, s)
+evalBoolExp (BVar x)                             = state $ \s -> (find x s, s)  --lookup the value in the environment and return it

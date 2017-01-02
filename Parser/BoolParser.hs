@@ -6,7 +6,6 @@ import Parser.Base
 import Parser.Util
 import Data.Base
 
-
 -- Parser for all boolean expressions
 parseBoolExp :: Parser BooleanExp
 parseBoolExp =  base `chainl1` parseBinOPBool binaryBoolOp

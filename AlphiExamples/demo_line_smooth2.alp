@@ -1,0 +1,66 @@
+commentOpen
+
+A simple linefollowing program
+
+commentClose
+
+Bpriority Is True Stop
+Bprior Is True Stop
+
+
+Command OpenMBot Stop
+While True Begin
+
+  Bleft Is Command SensorL Stop
+  Bright Is Command SensorR Stop
+
+  If Bleft And Bright Begin
+    Command MotorL 70 Stop
+    Command MotorR 70 Stop
+  End
+
+  If Bleft And Not Bright Begin
+      Command MotorL 0 Stop
+      Command MotorR 80 Stop
+
+      If Bprior Begin
+        Bprior Is False Stop
+        Bpriority Is False Stop
+      End
+  End
+
+  If Bright And Not Bleft Begin
+      Command MotorL 80 Stop
+      Command MotorR 0  Stop
+
+      If Bprior Begin
+        Bprior Is False Stop
+        Bpriority Is True Stop
+      End
+  End
+
+  If Not Open Bright Or Bleft Close Begin
+    If Bpriority Begin
+      While Not Open Bleft Or Bright Close Begin
+        Bleft Is Command SensorL Stop
+        Bright Is Command SensorR Stop
+        Command MotorL 80 Stop
+        Command MotorR 0  Stop
+      End
+
+    End
+
+    If Not Bpriority Begin
+      While Not Open Bleft Or Bright Close Begin
+        Bleft Is Command SensorL Stop
+        Bright Is Command SensorR Stop
+        Command MotorL 0 Stop
+        Command MotorR 80 Stop
+      End
+    End
+    Command Print True Stop
+    Bprior Is True Stop
+  End
+End
+
+Command CloseMBot Stop
