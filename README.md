@@ -4,6 +4,52 @@ Language that only uses alphanumerical characters and whitespace.
 
 #Backus–Naur form
 
+Pgm ∶∶= Stmt
 
-<letter>         ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
-<digit>          ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+Stmt ∶∶= <Var> "Is" <Exp> "Stop"
+     | "Command" <Output> <Exp> "Stop"
+     ∣ <Stmt> <Stmt>
+     ∣ "If" <Exp> "Begin" Stmt "End"
+     ∣ "While" <Exp> "Begin" Stmt
+
+Exp  ::= <BExp> | <NExp> | "Command" <Input>
+
+NExp ∶∶= <Num>
+       ∣ <NVar>
+       | 
+       ∣ <NExp> "Add" <NExp>
+       ∣ <NExp> "Sub" <NExp>
+       | <NExp> "Mul" <NExp>
+       | <NExp> "Div" <NExp>
+
+BExp ∶∶= <Bool>
+       | <BVar>
+       | <Bool>
+       ∣ <NExp> "Gt" <NExp>
+       | <NExp> "Lt" <NExp>
+       | <NExp> "Eq" <NExp>
+       ∣       "Not" <BExp>
+       ∣ <BExp> "And" <BExp>
+       | <BExp> "Or" <BExp>
+
+
+Input ::= "OpenMBot"
+      | "CloseMBot"
+      | "SensorR"
+      | "SensorL"
+      | "Ultra"
+
+Output ::= "Print"
+         | "MotorR"
+         | "MotorL"
+         | "Led1"
+         | "Led2"
+
+Bool    ∶∶= "True" | "False"
+Num     ∶∶=  Int | Float
+Int     ::= ["0"-"9"]
+Float   ::= <Int>"Float"<Int>
+Var     ∶∶= NVar | BVar
+NVar    ::= "N"<Letter>+
+BVar    ::= "B"<Letter>+
+Letter  ::= ["a"-"Z"]

@@ -2,11 +2,70 @@
 op welke bestaande programmeertalen je eigen programmeertaal gebaseerd is.
 #Inleiding
 
-In dit project werd een mini programeertaal ontworpen. 
+In dit project word de eenvoudige programmeertaal Alphi opgesteld.
+Hierbij is het de bedoeling verschillende basiselementen van imperatieve programmeertalen te implementeren.
+zoals bv: toekenning, variablen, volgorde van bewerkingen, while statment.
+De taal Alphi maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
+
+
+
+
 
 
 2. Syntax van de taal: Geeft een overzicht van de constructies in je taal in (informele) BNF vorm.
 #Syntax
+
+Pgm ∶∶= Stmt
+
+Stmt ∶∶= <Var> "Is" <Exp> "Stop"
+     | "Command" <Output> <Exp> "Stop"
+     ∣ <Stmt> <Stmt>
+     ∣ "If" <Exp> "Begin" Stmt "End"
+     ∣ "While" <Exp> "Begin" Stmt
+
+Exp  ::= <BExp> | <NExp> | "Command" <Input>
+
+NExp ∶∶= <Num>
+       ∣ <NVar>
+       |
+       ∣ <NExp> "Add" <NExp>
+       ∣ <NExp> "Sub" <NExp>
+       | <NExp> "Mul" <NExp>
+       | <NExp> "Div" <NExp>
+
+BExp ∶∶= <Bool>
+       | <BVar>
+       | <Bool>
+       ∣ <NExp> "Gt" <NExp>
+       | <NExp> "Lt" <NExp>
+       | <NExp> "Eq" <NExp>
+       ∣       "Not" <BExp>
+       ∣ <BExp> "And" <BExp>
+       | <BExp> "Or" <BExp>
+
+
+Input ::= "OpenMBot"
+      | "CloseMBot"
+      | "SensorR"
+      | "SensorL"
+      | "Ultra"
+
+Output ::= "Print"
+         | "MotorR"
+         | "MotorL"
+         | "Led1"
+         | "Led2"
+
+Bool    ∶∶= "True" | "False"
+Num     ∶∶=  Int | Float
+Int     ::= ["0"-"9"]
+Float   ::= <Int>"Float"<Int>
+Var     ∶∶= NVar | BVar
+NVar    ::= "N"<Letter>+
+BVar    ::= "B"<Letter>+
+Letter  ::= ["a"-"Z"]
+
+
 
 
 
@@ -15,10 +74,29 @@ doen en hoe je deze gebruikt.
 #Semantiek
 
 
-4. Voorbeelden programma’s: Geef volledige uitleg bij de programma’s die je geïmplementeerd hebt in
-je eigen programmeertaal.
-#Programma's
 
+#Programma's
+Korte beschrijvingen van het programma
+1) demo_police.alp
+   Start teller.
+   Indien teller even zet Led1 op rood en led 2 op blauw.
+   Indien teller oneven zet led2 op rood en led1 op blauw.
+   Verhoog Teller met 1
+   Begin bij stap 2.
+
+2) demo_line.alp
+  Lees beide lichtsensoren uit.
+  Indien beide sensoren Zwart zien rij de robot rechtdoor.
+  Indien links wit ziet en rechts zwart draai alleen de linker motor.
+  Indien rechts wit ziet en links zwart draai alleen de rechter motor.
+  Indien Beide wit zien rij achteruit.
+  Begin terug bij stap 1.
+
+3) demo_ultra.alp
+  Lees Ultrasonesensor uit.
+  Indien afstand Groter dan 40 rij rechtdoor.
+  Indien afstand Kleiner dan 40 draai de linkermotor vooruit en de rechtermotor achteruit.
+  Begin terug bij stap 1.
 
 #Implementatie
 5. Implementatie: Geef een overzicht van de belangrijke punten van de implementatie. Refereer naar
