@@ -9,12 +9,12 @@ import Data.Base
 
 -- Parser for all boolean expressions
 parseBoolExp :: Parser BooleanExp
-parseBoolExp =  parseLitBool
-            `mplus` parseBoolVar
-            `mplus` parseParens parseBoolExp
-            `mplus` parseAltBinOPBool binaryAltBoolOp
-            `mplus` parseUOPBool uBoolOp
-            `chainl1` parseBinOPBool binaryBoolOp
+parseBoolExp =  base `chainl1` parseBinOPBool binaryBoolOp
+            where base =      parseLitBool
+                      `mplus` parseBoolVar
+                      `mplus` parseParens parseBoolExp
+                      `mplus` parseAltBinOPBool binaryAltBoolOp
+                      `mplus` parseUOPBool uBoolOp
 
 -- Parser for a literal boolean
 parseLitBool :: Parser BooleanExp
@@ -42,7 +42,7 @@ parseBin (s, cons) = createP1' s BinaryBoolOp cons
 -- Parser for a numeral expresion boolean operator
 parseAltBinOPBool :: [(String, BinaryAltBoolOp)] -> Parser BooleanExp
 parseAltBinOPBool     = parseFromTuple' parseAltBin
-parseAltBin (s, cons) = do {x <- parseNumberExp;
-                            matchStr s;
-                            y <- parseNumberExp;
-                            return (BinaryAltBoolOp cons x y) ;}
+parseAltBin (s, cons) = do  x <- parseNumberExp
+                            matchStr s
+                            y <- parseNumberExp
+                            return (BinaryAltBoolOp cons x y)

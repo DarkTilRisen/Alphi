@@ -1,5 +1,11 @@
-Command OpenMBot Stop
+commentOpen
 
+A simple linefollowing program
+
+commentClose
+
+
+Command OpenMBot Stop
 While True Begin
 
   Bleft Is Command SensorL Stop

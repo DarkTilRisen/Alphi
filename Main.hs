@@ -13,7 +13,7 @@ import Control.Applicative
 -- parses a string to a Statement
 parseAll :: String -> Statement
 parseAll = parseResult finalParse
-        where finalParse = parseStatement
+        where finalParse = parseLeadingSpace >> parseStatement
 
 -- parses and evaluates a given string
 eval :: String -> IO (ReturnValue, Env ReturnValue)

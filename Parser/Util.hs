@@ -45,24 +45,24 @@ parseAlpha = parseTrailingSpace $ plus (spot isAlpha) >>= isKeyword
                       |  otherwise        = return x
 
 -- Parser that ignores whiteSpace and newlines
-parseWhiteSpace :: Parser String
-parseWhiteSpace = plus $ spot isSpace <|> token '\n'
+parseWhiteSpace :: Parser Char
+parseWhiteSpace = spot isSpace <|> token '\n'
 
 parseSpace :: Parser a -> Parser a
-parseSpace = (=<<) $ \x ->  parseWhiteSpace >> return x
+parseSpace = (=<<) $ \x ->  plus parseWhiteSpace >> return x
 
 parseSpaceAndComments :: Parser String
 parseSpaceAndComments = parseSpace parseComments
 
 -- Creates a new parser that ignores newLines and whitespace
 parseTrailingSpace :: Parser a -> Parser a
-parseTrailingSpace p = parseSpace p `mplus` do {x <- parseSpace p;
+parseTrailingSpace p = parseSpace p `mplus` do { x <- parseSpace p;
                                                 parseSpaceAndComments;
                                                 return x }
 
 
---parseLeadingSpace :: Parser a -> Parser a
---parseLeadingSpace p = parseSpace p `mplus`
+parseLeadingSpace ::  Parser String
+parseLeadingSpace = star parseWhiteSpace `mplus` (star parseWhiteSpace >> parseSpaceAndComments)
 
 
 -- Match a certain keyword

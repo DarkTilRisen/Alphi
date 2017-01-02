@@ -1,0 +1,37 @@
+1. Inleiding : In je inleiding geef je een overzicht van je project wat je verwezenlijk hebt. Geef ook aan
+op welke bestaande programmeertalen je eigen programmeertaal gebaseerd is.
+#Inleiding
+
+In dit project werd een mini programeertaal ontworpen. 
+
+
+2. Syntax van de taal: Geeft een overzicht van de constructies in je taal in (informele) BNF vorm.
+#Syntax
+
+
+
+3. Semantiek van de taal: Voor elk van je taalconstructies geef een korte uitleg wat de taalconstructies
+doen en hoe je deze gebruikt.
+#Semantiek
+
+
+4. Voorbeelden programma’s: Geef volledige uitleg bij de programma’s die je geïmplementeerd hebt in
+je eigen programmeertaal.
+#Programma's
+
+
+#Implementatie
+5. Implementatie: Geef een overzicht van de belangrijke punten van de implementatie. Refereer naar
+de lijnnummers in je code. Kleine stukjes code die heel belangrijk zijn kan je ook inline in je rapport
+plaatsen. Het is echter niet de bedoeling dat je verslag een kopie van je broncode is.
+
+
+#Conclusie
+6. Conclusie : Geef een overzicht van wat je gerealiseerd hebt en hoe je de bestaande code eventueel
+nog zou kunnen verbeteren.
+
+
+
+
+7. Appendix Broncode: Geef de volledige code van je project, zorg ervoor dat hierbij lijnnummers
+staan zodat je hier makkelijk naar kan refereren.
