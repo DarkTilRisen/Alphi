@@ -1,5 +1,3 @@
-1. Inleiding : In je inleiding geef je een overzicht van je project wat je verwezenlijk hebt. Geef ook aan
-op welke bestaande programmeertalen je eigen programmeertaal gebaseerd is.
 #Inleiding
 
 In dit project word de eenvoudige programmeertaal Alphi opgesteld.
@@ -8,11 +6,6 @@ zoals bv: toekenning, variablen, volgorde van bewerkingen, while statment.
 De taal Alphi maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
 
 
-
-
-
-
-2. Syntax van de taal: Geeft een overzicht van de constructies in je taal in (informele) BNF vorm.
 #Syntax
 
 Pgm ∶∶= Stmt
@@ -66,12 +59,10 @@ BVar    ::= "B"<Letter>+
 Letter  ::= ["a"-"Z"]
 
 
-
-
-
-3. Semantiek van de taal: Voor elk van je taalconstructies geef een korte uitleg wat de taalconstructies
-doen en hoe je deze gebruikt.
 #Semantiek
+
+
+
 
 
 
