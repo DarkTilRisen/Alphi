@@ -23,6 +23,6 @@ evalNumExp (BinaryNumericOp Mod x y) = evalBOp mod'' x y evalNumExp getNum Num
 evalNumExp (NVar x)                  = state $ \s -> (find x s,s)
 
 
--- what a stupid hack
+-- modulo for doubles what a stupid hack
 mod'' :: Double -> Double -> Double
 mod'' x y  = fromIntegral $ mod (round x ) (round y)

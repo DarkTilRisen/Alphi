@@ -39,6 +39,8 @@ Hierna worden de implementatie aspecten besproken.
 
 
 ## Syntax
+
+BNF notatie van de Alphi taal
 ```
 Pgm ∶∶= Stmt
 
@@ -95,7 +97,7 @@ Letter  ::= ["a"-"Z"]
 
 
 ## Semantiek
-
+Korte omschrijving van wat wat is.
 1. Expressies
   1. Numeric
 ```
@@ -196,8 +198,6 @@ Letter  ::= ["a"-"Z"]
     Vb: Geef led1 kleur Groen
     Command Led1 2 Stop
 ```
-
-
 3. Statements
 
   1. AssignStatement
@@ -253,42 +253,47 @@ Korte beschrijvingen van het programma
 
 ## Implementatie
 
-1. Parsen
+  Hier worden kort de interessante functies aangeraakt.
+1. Parsen (Parser)
 
-2. Evalueren
-  Bij het evalueren word er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit. Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variablen mappen naar waarden. zodat we later de waardes van variablen kunnne opvragen
+  1. Base.hs
+  Hier werd de Parser monad geimplementeerd het grootste deel van de code komt uit de slides over monads.
+  Wel belangrijk te noteren dat de option uit alternative and de mplus uit de monadplus anders geimplementeerd zijn namelijk als volgt
 
-
-
-
-
-
-
-
+  Monadplus:
+  Zie Parser.Base line?
+  mplus p1 p2 = probeer parser 1 en ook parser2.
 
 
+  Alternative:
+  Zie Parser.Base line?
+  option p1 p2 = indien parser 1 faalt probeer parser2.
+
+  2. Util.hs
+  Hier werden alle Parser functies geimplementeerd die nergens anders een plaats hadden.
+
+  3. NumericalParser.hs
+  Hier staan alle numerical expressie parsers.
+
+  4. BooleanParser.hs
+  Hier staan alle boolean expressie parsers.
+
+  5. StatementParser.hs
+  Hier staan alle Statemenparsers en dit is dus eveneens de programma parser.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+2. Evalueren (Evaluator)
+  Bij het evalueren word er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit. Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variablen mappen naar waarden. zodat we later de waardes van variablen kunnnen opvragen. De State zal ook return waardes van expressies teruggeven.
 
 
 
+
+
+3. RobotLib (Robot.Base.hs)
+  Hier werd verder gewerkt op de gegeven library zodat er intuitiver gewerkt kan worden gewerkt met de MBot
+  (Zie Robot.Base.hs line ?)
+  Een Intressante functie is de move functie hierbij wordt een device snelheid en motor meegegeven
+  zodat de motor makkelijker kan aangestuurd worden.
 
 ## Conclusie
 1. Algemeen:
@@ -316,18 +321,18 @@ Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen 
   2. demo_line.alp
   3. demo_ultra.alp
 2. Src
-  1.
-  2.
-  3.
-  4.
-  5.
-  6.
-  7.
-  8.
-  9.
-  10.
-  11.
-
+  1. Main.hs
+  2. Parser.Base.hs
+  3. Parser.NumericParser.hs
+  4. Parser.BoolParser.hs
+  5. Parser.StatementParser.hs
+  6. Parser.Util.hs
+  7. Evaluator.NumericEval.hs
+  8. Evaluator.BoolEval.hs
+  9. Evaluator.StatementEval.hs
+  10. Evaluator.Util
+  11. Data.Base.hs
+  12. Robot.Base.hs
 
 ## AlphiExamples
 

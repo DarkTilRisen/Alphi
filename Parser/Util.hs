@@ -58,7 +58,7 @@ parseSpaceAndComments = parseSpace parseComments
 parseTrailingSpace :: Parser a -> Parser a
 parseTrailingSpace p = parseSpace p `mplus` do  x <- parseSpace p
                                                 parseSpaceAndComments
-                                                return x 
+                                                return x
 
 
 parseLeadingSpace ::  Parser String
@@ -94,6 +94,7 @@ createP1 p c a1 = p >> (return . c) a1
 createP1' :: String -> (a -> b) -> a -> Parser b
 createP1' = createP1 . matchStr
 
+-- parse comments
 parseComments :: Parser String
 parseComments = do parseString commentOpen
                    findclose

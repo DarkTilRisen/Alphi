@@ -33,7 +33,7 @@ parseStruct s c = do matchStr s
 parseOUTCommand :: String -> OUTCommand -> Parser Statement
 parseOUTCommand s c = matchEnd $ fmap (Output c) (matchStr command >> matchStr s >> parseExp)
 
--- Parsre for an input command
+-- Parser for an input command
 parseINCommand :: String -> INCommand -> Parser Exp
 parseINCommand s c = matchStr command >> matchStr s >> (return . Input) c
 

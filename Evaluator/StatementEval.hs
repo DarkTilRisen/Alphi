@@ -9,7 +9,7 @@ import System.HIDAPI (Device)
 import MBot hiding (Command)
 
 
---Evaluate expressions
+-- Evaluate expressions
 evalExp :: Exp -> MyState
 evalExp (BExp  e) = evalBoolExp e
 evalExp (NExp  e) = evalNumExp  e
@@ -50,6 +50,9 @@ evalInput' f c = fmap c (returnDevice >>= liftIO . f . getDevice)
 evalPrint :: (Show a) => MyState -> (ReturnValue -> a) -> MyState
 evalPrint e f = e >>= (liftIO . print . f) >> return Void
 
+-- evaluates a robot instruction
+-- e is the expression
+-- f is a function that returns an IO
 evalRobotFunction :: Integral c => Exp -> t -> (c -> t -> Device -> IO a) -> StateT (Env ReturnValue) IO ReturnValue
 evalRobotFunction e l f = do x <- evalExp e
                              d <- returnDevice;
