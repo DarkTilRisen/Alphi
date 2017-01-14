@@ -8,6 +8,7 @@ import Parser.StatementParser
 import Evaluator.StatementEval
 import Parser.Util
 import Control.Applicative
+import System.Environment
 
 
 -- parses a string to a Statement
@@ -19,6 +20,5 @@ parseAll = parseResult finalParse
 eval :: String -> IO (ReturnValue, Env ReturnValue)
 eval = flip (runStateT . evalStatement . parseAll) emptyEnv
 
---run the parser and evaluator from a given file.
-main :: IO ()
-main = readFile "AlphiExamples/demo_line_smooth2.alp" >>= eval >> print "done"
+main :: IO (ReturnValue, Env ReturnValue)
+main = getArgs >>= readFile . head >>= eval

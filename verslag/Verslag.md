@@ -8,7 +8,7 @@ year: 2016-2017
 1. Inleiding
 2. Syntax (BNF)
 3. Semantiek
-4. VoorbeeldProgramma's
+4. Voorbeeld Programma's
   1. Demo_police
   2. Demo_line
   3. Demo_ultra
@@ -17,6 +17,9 @@ year: 2016-2017
   2. Parsen
   3. Evalueren
   4. Robot Lib
+6. Mogelijke Verbeteringen.
+  1. Taalaspecten
+  2. Programmeeraspecten
 6. Conclusie
   1. Algemeen
   2. Definitie
@@ -29,22 +32,26 @@ year: 2016-2017
 
 In dit project wordt de eenvoudige programmeertaal Alphi opgesteld.
 Hierbij is het de bedoeling verschillende basiselementen van een imperatieve programmeertalen te implementeren.
-zoals bv: toekenning, variablen en volgorde van bewerkingen.
+zoals toekenning, variablen en volgorde van bewerkingen.
 De taal die hieronder wordt uitgewerkt heet Alphi wat staat voor alphanumerical.
 Deze taal maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
 Eerst zal de syntax worden vastgelegd.
 Vervolgens wordt de semantiek vastgelegd en worden voorbeeld programma's gegeven.
 Hierna worden de implementatie aspecten besproken.
+Als laatste worden nog enkele mogelijke verbeteringen of aanpassingen voorgesteld.
 
 
 
 ## Syntax
-
 BNF notatie van de Alphi taal
+
+note: Soms word de [] notatie gebruikt om ranges aan te duiden.
+bv  :[ 1-3] voor 1,2,3
+
 ```
 Pgm ∶∶= Stmt
 
-Stmt   ∶∶= <Var> "Is" <Exp> "Stop"
+Stmt   ::= <Var> "Is" <Exp> "Stop"
         | "Command" <Output> <Exp> "Stop"
         ∣ <Stmt> <Stmt>
         ∣ "If" <Exp> "Begin" Stmt "End"
@@ -54,7 +61,7 @@ Exp    ::= <BExp>
          | <NExp>
          | "Command" <Input>
 
-NExp   ∶∶= <Num>
+NExp   ::= <Num>
          ∣ <NVar>
          ∣ <NExp> "Add" <NExp>
          ∣ <NExp> "Sub" <NExp>
@@ -62,7 +69,7 @@ NExp   ∶∶= <Num>
          | <NExp> "Div" <NExp>
          | "Open" NExp "Close"
 
-BExp   ∶∶= <Bool>
+BExp   ::= <Bool>
          | <BVar>
          ∣  "Not" <BExp>
          ∣ <NExp> "Gt" <NExp>
@@ -84,26 +91,29 @@ Output ::= "Print"
          | "Led1"
          | "Led2"
 
-Bool    ∶∶= "True" | "False"
-Num     ∶∶=  Int | Float
+Bool    ::= "True" | "False"
+Num     ::=  Int | Float
 Int     ::= ["0"-"9"]+
 Float   ::= <Int>"Point"<Int>
-Var     ∶∶= NVar | BVar
+Var     ::= NVar | BVar
 NVar    ::= "N"<Letter>+
 BVar    ::= "B"<Letter>+
 Letter  ::= ["a"-"Z"]
-
 ```
 
 
 ## Semantiek
-Korte omschrijving van wat wat is.
+Korte omschrijving over de semantiek.
+
+Algemeen:
+Achter elk keyword/literal/variable moet verplicht een whitespace karakter staan.
+Dit maakt de taal iets duidelijker.
 1. Expressies
   1. Numeric
 ```
     Volgorde van bewerkingen
     Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geevalueerd.
-    Hoe hoger het niveau hoe eerder ze geivalueerd worden
+    Hoe hoger het niveau hoe eerder ze geëvalueerd worden.
 
     Niveau 1(literalen)  
     Float, Int
@@ -118,7 +128,8 @@ Korte omschrijving van wat wat is.
     Niveau 4 (haakjes)  
     Open Close  
 
-    vb: 4 Sub 4 Mul 4 = -12      
+    vb: Enkele Numerical Expressies
+        4 Sub 4 Mul 4 = -12      
         4 Mul 4 Mul 2 Sub 3 = 29  
 ```
   2. Boolean
@@ -127,7 +138,7 @@ Korte omschrijving van wat wat is.
     Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geevalueerd.
     Hoe hoger het niveau hoe eerder ze geivalueerd worden
 
-    Niveau 1
+    Niveau 1 (literalen)
     True, False
 
     Niveau 2
@@ -141,7 +152,8 @@ Korte omschrijving van wat wat is.
 
     Niveau 5 (Haakjes)
 
-    vb: True And True            = True
+    vb: Enkele booleaanse expressies.
+        True And True            = True
         4 Lt 5 And False         = False
         4 Lt 5 And True          = True
         4 Lt 5 And False Or True = True
@@ -151,7 +163,7 @@ Korte omschrijving van wat wat is.
   1. Input  
     1. SensorL/SensorR
 ```
-    Gebruik: Lees een booleanaanse waarde uit de linkse/rechtse lichtsensor.
+    Gebruik: Lees een booleaanse waarde uit de linkse/rechtse lichtsensor.
     False = sensor ziet wit
     True  = sensor ziet zwart
     Vb: lees waarde uit de linkse lichtsensor.
@@ -159,7 +171,7 @@ Korte omschrijving van wat wat is.
 ```
     2. Ultra
 ```
-    Gebruik: Lees een numerische waarde uit de ultrasonesensor
+    Gebruik: Lees een numerische waarde uit de ultrasonesensor.
     False = sensor ziet wit
     True  = sensor ziet zwart
     Vb: lees waarde uit de ultrasonesensor.
@@ -169,31 +181,31 @@ Korte omschrijving van wat wat is.
     4. OpenMBot/CloseMBot
 ```
     Gebruik: Open/Sluit de connectie met de robot.
-    Vb: Maak robot klaar voor communicatie
+    Vb: Maak robot klaar voor communicatie.
     Command OpenMBot Stop
 ```
 
   2. Output
     1. Print
 ```
-    Gebruik: Print een expressie uit naar standaard out.
+    Gebruik: Print één expressie uit naar standaard out.
     Vb: Toon 3.
     Command Print 3 Stop
 ```
     2. MotorR/MotorL
 ```
-    Gebruik: Zet motor aan met snelheid [-255,...,255]
-    Vb: Rij vooruit met snelheid 100
+    Gebruik: Zet motor aan met snelheid [-255,...,255].
+    Vb: Rij vooruit met snelheid 100.
     Command MotorR 100 Stop
     Command MotorL 100 Stop
 ```
 
     3. Led1/Led2
 ```
-    Gebruik: Geef Led1/Led2 kleur
+    Gebruik: Geef Led1/Led2 kleur.
     1 -> rood
     2 -> groen
-    3-> blauw
+    3 -> blauw
 
     Vb: Geef led1 kleur Groen
     Command Led1 2 Stop
@@ -202,9 +214,9 @@ Korte omschrijving van wat wat is.
 
   1. AssignStatement
 ```
-    Gebruik: Ken een waarde aan een variable Toe
+    Gebruik: Ken een waarde aan een variable Toe.
 
-    Vb: Zet variable Tobiah op 20
+    Vb: Zet variable Tobiah op 20.
     NTobiah Is 20 Stop
 
 ```
@@ -258,41 +270,53 @@ Korte beschrijvingen van het programma
 
   1. Base.hs
   Hier werd de Parser monad geimplementeerd het grootste deel van de code komt uit de slides over monads.
-  Wel belangrijk te noteren dat de option uit alternative and de mplus uit de monadplus anders geimplementeerd zijn namelijk als volgt
+  Wel belangrijk te noteren dat de option uit alternative en de mplus uit de monadplus anders geimplementeerd zijn.
+  Hier volgt een omschrijving van hun implementatie.
 
   Monadplus:
-  Zie Parser.Base line?
+  Zie Parser.Base line ?
+  mzero = gefaalde parser.
   mplus p1 p2 = probeer parser 1 en ook parser2.
 
 
   Alternative:
-  Zie Parser.Base line?
+  Zie Parser.Base line ?
+  empty = gefaalde parser.
   option p1 p2 = indien parser 1 faalt probeer parser2.
 
   2. Util.hs
   Hier werden alle Parser functies geimplementeerd die nergens anders een plaats hadden.
-  
+
+  Twee Intressante functies zijn matchStr en chainl1.
+
+  matchStr:
+  Zie Parser.Util line ?
+  matchStr s = match een bepaalde string en minstens één whitespace karakter of commentaar.
+
+  chainl1:
+  Zie Parser.Uitl line ?
+  chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
+  chainl1 p op = neemt 2 parsers binnen 1 gewone parser en 1 operator parser en zal de operator parser met laagste prioriteit toepassen.
 
 
-  3. NumericalParser.hs
-  Hier staan alle numerical expressie parsers.
-
-  4. BooleanParser.hs
-  Hier staan alle boolean expressie parsers.
-
-  5. StatementParser.hs
-  Hier staan alle Statemenparsers en dit is dus eveneens de programma parser.
+  3. NumericalParser.hs / BooleanParser.h / StatementParser.hs
+  Hier staan alle taal parsers. Deze brengen echter weinig nieuwigheden en
+  combineren gewoon parsers uit base of util om aan hun speciefieke resultaat te komen.
 
 
 
 2. Evalueren (Evaluator)
-  Bij het evalueren word er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit. Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variablen mappen naar waarden. zodat we later de waardes van variablen kunnnen opvragen. De State zal ook return waardes van expressies teruggeven.
+  Bij het evalueren word er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit.
+  Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variablen mappen naar waarden.
+  Zodat we later de waardes van variablen kunnnen opvragen.
+  De State zal ook return waardes van expressies teruggeven.
 
   1. NumericEval.hs / BoolEval.bs
 
-    Het idee Hierbij is te pattern matchen op de datastructuur En op deze manier kunnen we elk geval appart behandelen.
-    Voor functies die veel voorkomen word een abstractere versie aangemaakt in Evaluator.Util.hs
-    een mooi voorbeeld hiervan is de functie EvalBOp zie Evaluator.Util.hs line ?.
+    Het idee Hierbij is te pattern matchen op de datastructuur op deze manier kunnen we elk geval appart behandelen.
+    Voor functies die veel voorkomen word een abstractere versie aangemaakt in Evaluator.Util.hs.
+    Een mooi voorbeeld hiervan is de functie EvalBOp zie Evaluator.Util.hs line ?.
+
     EvalBOp is een functie die 6 argumenten neemt.
 
     1) Functie die 2 a's binnen neemt en een a teruggeeft
@@ -302,21 +326,44 @@ Korte beschrijvingen van het programma
     5) Unwrapper (m a -> a) functie die een return value unwrapped
     6) Constructor Wrapper constructor
 
-    Deze functie zal de 2 expressies uitrekenen de return waarden daarvan uitpakken de functie erop toepassen en vervolgens deze terug wrappen en in een MyState steken.
+    Deze functie zal de 2 expressies uitrekenen.
+    Vervolgens De return waarden daarvan uitpakken.
+    Hierna functie erop toepassen en als laatste deze terug wrappen en in een MyState steken.
 
-    2. StatementEval:
+    2. StatementEval
     De StatementEval werkt op dezelfde manier als NumericEval en BoolEval.
     Maar bij het evalueren moet in onze statemonad aan IO gedaan worden.
-    Dit omdat we met onze robot willen kunnen communiceren.
+    Dit omdat we met onze robot/standaardout willen kunnen communiceren.
     De functies evalInput'(line ?), evalPrint (line ? ), evalRobotFunction (line ?) maken om dit te kunnen doen gebruik van liftIO.
 
 
 3. RobotLib (Robot.Base.hs)
   Hier werd verder gewerkt op de gegeven library zodat er intuitiver gewerkt kan worden gewerkt met de MBot
-  En zodat er een mooi scheiding kan blijven bestaan tussen de robotaansturing en de taal.
+  En zodat er een mooie scheiding kan blijven bestaan tussen de robotaansturing en de taal Alphi.
 
-  Een Intressante functie is de move functie hierbij wordt een device snelheid en motor meegegeven
-  zodat de motor makkelijker kan aangestuurd worden. De Implementatie kan gevonden worden onder Robot.Base.hs line ? .
+  Een Intressante functie is de move functie hierbij wordt een device, snelheid en motor meegegeven
+  zodat de motor makkelijker kan aangestuurd worden.
+  De Implementatie kan gevonden worden onder Robot.Base.hs line ? .
+
+
+
+## Mogelijke Verbeteringen
+1. Taalaspecten
+  Het gebruik van enkel alphanumerical karakters is niet aangeraden.
+  Het is zowel voor de leesbaarheid als voor de moeilijkheid van het parsen beter om wel gebruik te maken van speciale karakters.
+  Verder zou het leuk zijn moest de taal werkelijk statisch zijn In de plaats van voor elke identifier een ID te zetten zoals N(Numerical) of B(Boolean).
+  Dit kan gebeuren door tijdens het parsen ook een state van een environment bij te houden waarin elke variable gemapped zou worden op het type.
+  Er zijn nog enkele kleine aspecten die de programmeertaal niet helemaal statisch maken zoals numerical expressions die kunnnen staan als boolean in If/While Statement.
+  Ook zou het leuk zijn moesten integers niet achterliggend worden geconverteerd naar doubles zoals nu het geval is.
+  Als laatste Verbetering zouden multiple parameters voor bv de het aansturen van de leds van de robot ook handig zijn.
+
+2. Programmeeraspecten
+  In de programmeertaal zit in de implementatie van de volgorde van bewerkingen werkelijk ook volgorde van bewerkingen.
+  Wat ik hiermee bedoel is dat het omwisselen van 2 parsers hier er voor kan zorgen dat heel de parser niet meer werkt.
+  Dit komt doordat er gebruik wordt gemaakt van de chain bewerking en mplus bewerking om de parsers te combineren het omwisselen van 2 parsers kan hierbij echter werkelijk heel de parser breken helpen. Hierdoor zou het misschien beter zijn de manier waarop volgorde van bewerkingen gedaan wordt te herzien en robuuster te schrijven.
+
+
+
 
 ## Conclusie
 1. Algemeen:
@@ -331,8 +378,7 @@ Hierdoor moet dit opgevangen worden tijdens het evalueren dit is ongewild.
 
 3. Implementatie:
 De parseLibrary is vrij onduidelijk geschreven er onbreekt een mooie volgbare hierachy die bv wel aanwezig is bij het evalueren.
-
-Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen En er op ieder moment rekening met whitespace en commentaar gehouden moest worden.
+Dit komt voornamelijk doordat er geen eenduidige manier is om dingen te parsen En er op ieder moment rekening met whitespace en commentaar gehouden moet worden.
 
 
 
@@ -451,5 +497,3 @@ Dit komt voornamelijk doordat er geen eenduidige manier was om dingen te parsen 
     21   Command Print Ndistance Stop
     22 End
 ```
-
-## Src
