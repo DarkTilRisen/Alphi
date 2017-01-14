@@ -286,6 +286,7 @@ Korte beschrijvingen van het programma
 
   2. Util.hs
   Hier werden alle Parser functies geimplementeerd die nergens anders een plaats hadden.
+
   Twee interessante functies zijn matchStr en chainl1.
 
   matchStr:

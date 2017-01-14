@@ -1,44 +1,44 @@
-Pgm ∶∶= Stmt
+Pgm ::= Stmt
 
-Stmt   ::= <Var> "Is" <Exp> "Stop"
-        | "Command" <Output> <Exp> "Stop"
-        ∣ <Stmt> <Stmt>
-        ∣ "If" <Exp> "Begin" Stmt "End"
-        ∣ "While" <Exp> "Begin" Stmt
+Stmt ::= <Var> "Is" <Exp> "Stop"
+      |"Command" <Output> <Exp> "Stop"
+      |<Stmt> <Stmt>
+      | "If" <Exp> "Begin" Stmt "End"
+      | "While" <Exp> "Begin" Stmt
 
 Exp    ::= <BExp>
-         | <NExp>
-         | "Command" <Input>
+        | <NExp>
+        | "Command" <Input>
 
 NExp   ::= <Num>
-         ∣ <NVar>
-         ∣ <NExp> "Add" <NExp>
-         ∣ <NExp> "Sub" <NExp>
-         | <NExp> "Mul" <NExp>
-         | <NExp> "Div" <NExp>
-         | "Open" NExp "Close"
+        | <NVar>
+        | <NExp> "Add" <NExp>
+        | <NExp> "Sub" <NExp>
+        | <NExp> "Mul" <NExp>
+        | <NExp> "Div" <NExp>
+        | "Open" NExp "Close"
 
 BExp   ::= <Bool>
-         | <BVar>
-         ∣  "Not" <BExp>
-         ∣ <NExp> "Gt" <NExp>
-         | <NExp> "Lt" <NExp>
-         | <NExp> "Eq" <NExp>
-         ∣ <BExp> "And" <BExp>
-         | <BExp> "Or" <BExp>
-         | "Open" BExp "Close"
+        | <BVar>
+        |  "Not" <BExp>
+        | <NExp> "Gt" <NExp>
+        | <NExp> "Lt" <NExp>
+        | <NExp> "Eq" <NExp>
+        | <BExp> "And" <BExp>
+        | <BExp> "Or" <BExp>
+        | "Open" BExp "Close"
 
 Input  ::= "OpenMBot"
-         | "CloseMBot"
-         | "SensorR"
-         | "SensorL"
-         | "Ultra"
+        | "CloseMBot"
+        | "SensorR"
+        | "SensorL"
+        | "Ultra"
 
 Output ::= "Print"
-         | "MotorR"
-         | "MotorL"
-         | "Led1"
-         | "Led2"
+        | "MotorR"
+        | "MotorL"
+        | "Led1"
+        | "Led2"
 
 Bool    ::= "True" | "False"
 Num     ::=  Int | Float
