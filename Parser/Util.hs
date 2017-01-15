@@ -65,7 +65,7 @@ parseLeadingSpace ::  Parser String
 parseLeadingSpace = star parseWhiteSpace `mplus` (star parseWhiteSpace >> parseSpaceAndComments)
 
 
--- Match a certain keyword
+-- Match a certain keyword and parse Whitespace or comments
 matchStr :: String -> Parser String
 matchStr = parseTrailingSpace  . parseString
 
@@ -76,7 +76,7 @@ parseParens p   = do matchStr parOpen
                      matchStr parClosed
                      return x
 
--- Match
+
 parseBrackets :: Parser a -> Parser a
 parseBrackets p = do matchStr bracketsOpen
                      x <- p

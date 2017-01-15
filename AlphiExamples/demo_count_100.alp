@@ -1,0 +1,11 @@
+commentOpen
+
+A simple counter
+
+commentClose
+
+Nx Is 0 Stop
+While Nx Lt 101 Begin
+  Command Print Nx Stop
+  Nx Is Nx Add 1 Stop
+End

@@ -7,16 +7,47 @@
 \usepackage{pdfpages}
 \usepackage{graphicx}
 \renewcommand{\contentsname}{Inhoud}
-\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage[top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+
+
+\lstset{
+ frame=single,
+ breaklines=true,
+ postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
 \lstdefinestyle{numbered}{
  numbers=left,               % Ort der Zeilennummern
  stepnumber=1,               % Abstand zwischen den Zeilennummern       
  numberfirstline=false
 }
 
-\newcommand{\putmyhaskellhere}[2]{
-  \subsubsection{#1.#2}
-  \lstinputlisting[language=Haskell,style=numbered]{../#1/#2.hs}
+\lstdefinelanguage{Alphi}{
+    keywords = {
+        While,
+        If,
+        Is,
+        Stop, 
+        Open, 
+        Close , 
+        Begin, 
+        End, 
+        Command, 
+        commentOpen, 
+        commentClose, 
+        And, 
+        Or, 
+        Add, 
+        Sub, 
+        Div, 
+        Mod, 
+        Not,
+        Mul,
+        Lt,
+        Gt,
+        Eq
+    },
+    morekeywords = {}
 }
 
 \makeatletter         
@@ -30,177 +61,195 @@
 \end{center}
 }
 
+
 \title{Alphi}
-\author{Tobiah Lissens}
+\author{Lissens Tobiah}
 \date{15-01-2017}
 
 \begin{document}
 
 \maketitle
 \newpage
+\newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
 \tableofcontents
 
-
+\newpage
 \section{Inleiding}
-In dit project wordt de eenvoudige programmeertaal Alphi opgesteld.
+In dit project wordt de eenvoudige programmeertaal Alphi opgesteld in Haskell.
 Hierbij is het de bedoeling verschillende basiselementen van een imperatieve programmeertaal te implementeren:
 zoals toekenning, variabelen en volgorde van bewerkingen.
 De taal die hieronder wordt uitgewerkt heet Alphi, wat staat voor alphanumerical.
 Deze taal maakt enkel gebruik van alphanumerische karakters met de uitzondering dat whitespace ook is toegestaan.
 Eerst zal de syntax worden vastgelegd.
-Vervolgens wordt de semantiek vastgelegd en worden voorbeeldprogramma's gegeven.
-Hierna worden de implementatie-aspecten besproken.
+Vervolgens wordt de semantiek beschreven en worden enkele voorbeeldprogramma's gegeven.
+Hierna worden enkele implementatie-aspecten besproken.
 Als laatste worden nog enkele mogelijke verbeteringen of aanpassingen voorgesteld.
 
 \newpage
 \section{Syntax(BNF)}
-    note: Soms word de [ ] notatie gebruikt om ranges aan te duiden.\\
+    \textbf{notes:} \\
+    Wat niet duidelijk gemaakt wordt in deze bnf notatie is dat tussen elk keyword minstens een whitespace karakter moet zitten\\
+    Soms wordt de [ ] notatie gebruikt om ranges aan te duiden.\\
     bv  :[1 - 3] voor 1,2,3
     \lstinputlisting{bnf.txt}
+
+    
+
 \section{Semantiek}
   \subsection{Expressies}
-    \subsubsection{Numeric}
-    Volgorde van bewerkingen\\
+    Volgorde van bewerkingen:\\
     Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geëvalueerd.
-    Hoe hoger het niveau hoe eerder ze geëvalueerd worden.
-
+    Hoe hoger het niveau hoe eerder ze geëvalueerd worden. 
+    \subsubsection{Numeric}
+    
     Niveau 1(literalen)  
     Float, Int
-    Vb: 10Point4, 4
-
+    vb: 10,4 = 10Point4\\
     Niveau 2  
-    Add, Sub
-
+    Add, Sub\\
     Niveau 3  
-    Mul, Div, Mod
-
+    Mul, Div, Mod\\
     Niveau 4 (haakjes)  
     Open Close  
-   \begin{lstlisting}
-    vb: Enkele Numerical Expressies
-        4 Sub 4 Mul 4 = -12      
-        4 Mul 4 Mul 2 Sub 3 = 29
-   \end{lstlisting}
+     \begin{lstlisting}[language=Alphi]
+vb: Enkele Numerical Expressies
+    4 Sub 4 Mul 4 = -12      
+    4 Mul 4 Mul 2 Sub 3 = 29
+     \end{lstlisting}
     \subsubsection{Boolean}
-    Volgorde Van bewerkingen:
-    Voor bewerkingen op hetzelfde niveau wordt van links naar rechts geëvalueerd.
-    Hoe hoger het niveau hoe eerder ze geëvalueerd worden
-
+    
     Niveau 1 (literalen)
-    True, False
-
+    True, False\\
     Niveau 2
-    And, Or
-
+    And, Or\\
     Niveau 3
-    Gt, Lt , Eq
-
+    Gt, Lt , Eq\\
     Niveau 4
-    Not
-
+    Not\\
     Niveau 5 (Haakjes)
-    \begin{lstlisting}
-    vb: Enkele booleaanse expressies.
-        True And True            = True
-        4 Lt 5 And False         = False
-        4 Lt 5 And True          = True
-        4 Lt 5 And False Or True = True
-    \end{lstlisting}
+    Open Close
+      \begin{lstlisting}[language=Alphi]
+vb: Enkele booleaanse expressies.
+    True And True            = True
+    4 Lt 5 And False         = False
+    4 Lt 5 And True          = True
+    4 Lt 5 And False Or True = True
+      \end{lstlisting}
   \subsection{Statements}
     \subsubsection{AssignStatement}
-    Gebruik: Ken een waarde aan een variable Toe.
-      \begin{lstlisting}
-        Vb: Zet variable Tobiah op 20.
-        NTobiah Is 20 Stop
+    Gebruik: Ken een waarde aan een variable toe.
+      \begin{lstlisting}[language=Alphi]
+vb: Zet variable Tobiah op 20.
+    NTobiah Is 20 Stop
       \end{lstlisting}
     \subsubsection{If}
     Gebruik: Herhaalt de statements tussen Begin en End tot de Expression voor Begin naar False evalueert.
-      \begin{lstlisting}
-        Vb: Programma dat tot 10 telt.
-        Nx IS 0 Stop
-        While Nx Lt 10 Begin
-            NX Is NX Add 1 Stop
-        End
+      \begin{lstlisting}[language=Alphi]
+vb: Programma dat 10 print als Nx gelijk is aan 0.
+    Nx Is 0 Stop
+    If Nx Eq 0 Begin
+      Command Print 10 Stop
+    End
       \end{lstlisting}
     \subsubsection{While}
     Gebruik: Herhaalt de statements tussen Begin en End tot de Expression voor Begin naar False evalueert.
-      \begin{lstlisting}
-        Vb: Programma dat tot 10 telt.
-        Nx IS 0 Stop
-        While Nx Lt 10 Begin
-            NX Is NX Add 1 Stop
-        End
+      \begin{lstlisting}[language=Alphi]
+vb: Programma dat tot 10 telt.
+    Nx Is 0 Stop
+    While Nx Lt 10 Begin
+        NX Is NX Add 1 Stop
+    End
       \end{lstlisting}
   \subsection{Commands}
     \subsubsection{Print}
       Gebruik: Print één expressie uit naar standaard out.
-      \begin{lstlisting}
-        Vb: Toon 3.
-        Command Print 3 Stop
+      \begin{lstlisting}[language=Alphi]
+vb: Toon 3.
+    Command Print 3 Stop
       \end{lstlisting}
     \subsubsection{MotorR/MotorL}
       Gebruik: Zet motor aan met snelheid [-255,...,255].
-      \begin{lstlisting}
-        Vb: Rij vooruit met snelheid 100.
-        Command MotorR 100 Stop
-        Command MotorL 100 Stop
+      \begin{lstlisting}[language=Alphi]
+vb: Rij vooruit met snelheid 100.
+    Command MotorR 100 Stop
+    Command MotorL 100 Stop
       \end{lstlisting}
     \subsubsection{Led1/Led2}
-      Gebruik: Geef Led1/Led2 kleur.\\
-      1 -> rood\\
-      2 -> groen\\
-      3 -> blauw\\
-      \begin{lstlisting}
-        Vb: Geef led1 kleur Groen
-        Command Led1 2 Stop
+      Gebruik: Geef Led1/Led2 kleur.
+      
+      1 -> rood
+      
+      2 -> groen
+      
+      3 -> blauw
+      
+      \begin{lstlisting}[language=Alphi]
+vb: Geef led1 kleur Groen
+    Command Led1 2 Stop
       \end{lstlisting}
     \subsubsection{SensorL/SensorR}
       Gebruik: Lees een booleaanse waarde uit de linkse/rechtse lichtsensor.
-      False = sensor ziet wit\\
-      True  = sensor ziet zwart\\
-      \begin{lstlisting}
-        Vb: lees waarde uit de linkse lichtsensor.
-        Bvalue Is Command SensorL Stop
+      
+      False = sensor ziet wit
+      
+      True  = sensor ziet zwart
+      
+      \begin{lstlisting}[language=Alphi]
+vb: lees waarde uit de linkse lichtsensor.
+    Bvalue Is Command SensorL Stop
       \end{lstlisting}
     \subsubsection{Ultra}
       Gebruik: Lees een numerische waarde uit de ultrasonesensor.
+      
       False = sensor ziet wit
+      
       True  = sensor ziet zwart
-      \begin{lstlisting}
-      Vb: lees waarde uit de ultrasonesensor.
-      Nvalue Is Command Ultra Stop
+      
+      \begin{lstlisting}[language=Alphi]
+vb: lees waarde uit de ultrasonesensor.
+    Nvalue Is Command Ultra Stop
       \end{lstlisting}
     \subsubsection{OpenMBot/CloseMBot}
       Gebruik: Open/Sluit de connectie met de robot.
-      \begin{lstlisting}
-        Vb: Maak robot klaar voor communicatie.
-        Command OpenMBot Stop
+      \begin{lstlisting}[language=Alphi]
+vb: Maak robot klaar voor communicatie.
+    Command OpenMBot Stop
       \end{lstlisting}
      
     
 \section{Programma's}
-Korte beschrijvingen van het programma.
+Korte beschrijvingen van de 3 voorbeeld programma's.
   \subsection{demo\_police.alp}
- (zie Appendix Broncode)\\
-   Start teller.\\
-   Indien teller even zet Led1 op rood en led 2 op blauw.\\
-   Indien teller oneven zet led2 op rood en led1 op blauw.\\
-   Verhoog Teller met 1.\\
-   Begin bij stap 2.\\
+ (zie Appendix Broncode pagina 10 )
+ \begin{enumerate}
+   \item Start teller.
+   \item Indien teller even zet Led1 op rood en led 2 op blauw.
+   \item Indien teller oneven zet led2 op rood en led1 op blauw.
+   \item Verhoog Teller met 1.
+   \item Begin bij stap 2.
+   \end{enumerate}
   \subsection{demo\_police.alp}
-  (zie Appendix Broncode)\\
-  Lees beide lichtsensoren uit.\\
-  Indien beide sensoren Zwart zien rij de robot rechtdoor.\\
-  Indien links wit ziet en rechts zwart draai alleen de linker motor.\\
-  Indien rechts wit ziet en links zwart draai alleen de rechter motor.\\
-  Indien Beide wit zien rij achteruit.\\
-  Begin terug bij stap 1.\\
+  (zie Appendix Broncode pagina 10)
+  \begin{enumerate}
+   \item Lees beide lichtsensoren uit.
+   \item Indien beide sensoren Zwart zien rij de robot rechtdoor.
+   \item Indien links wit ziet en rechts zwart draai alleen de linker motor.
+   \item Indien rechts wit ziet en links zwart draai alleen de rechter motor.
+   \item Indien Beide wit zien rij achteruit.
+   \item Begin terug bij stap 1.
+  \end{enumerate}
+  
+  
   \subsection{demo\_ultra.alp}
- (zie Appendix Broncode)\\
-  Lees Ultrasonesensor uit.\\
-  Indien afstand Groter dan 40 rij rechtdoor.\\
-  Indien afstand Kleiner dan 40 draai de linkermotor vooruit en de rechtermotor achteruit.\\
-  Begin terug bij stap 1.\\
+  (zie Appendix Broncode pagina 11)
+  \begin{enumerate}
+   \item Lees Ultrasonesensor uit.
+   \item Indien afstand Groter dan 40 rij rechtdoor.
+   \item Indien afstand Kleiner dan 40 draai de linkermotor vooruit en de rechtermotor achteruit.
+   \item Begin terug bij stap 1.
+  \end{enumerate}
+ 
+  
 
 
 \section{Implementatie}
@@ -210,55 +259,58 @@ Korte beschrijvingen van het programma.
     \subsubsection{Base.hs}
     Hier werd de Parser monad geimplementeerd. Het grootste deel van de code komt uit de slides over monads.
     Wel belangrijk te noteren dat de option uit alternative en de mplus uit de monadplus anders geïmplementeerd zijn.
+    Hierbij is er geopteerd om zoveel mogelijk mplus te gebruiken omdat hierbij de volgorde van argumenten niet van belang is terwijl die bij option wel zo is\\
     Hier volgt een omschrijving van hun implementatie.
 
-      \begin{verbatim}
-      Monadplus:
-      Zie Parser.Base line ?
-      mzero = gefaalde parser.
-      mplus p1 p2 = probeer parser 1 en ook parser2.
-      \end{verbatim}
+      \begin{lstlisting}
+    Monadplus:
+    Zie Parser.Base line 25
+    mzero = gefaalde parser.
+    mplus parser1 parser2 = probeer parser 1 en ook parser2.
+      \end{lstlisting}
 
-      \begin{verbatim}
-      Alternative:
-      Zie Parser.Base line ?
-      empty = gefaalde parser.
-      option p1 p2 = indien parser 1 faalt probeer parser2.
-      \end{verbatim}
+      \begin{lstlisting}
+    Alternative:
+    Zie Parser.Base line 30
+    empty = gefaalde parser.
+    option parser1 parser2 = indien parser 1 faalt probeer parser2.
+      \end{lstlisting}
     \subsubsection{Util.hs}
       Hier werden alle Parser functies geimplementeerd die nergens anders een plaats hadden.
       Twee interessante functies zijn matchStr en chainl1.
-        \begin{verbatim}
-        matchStr:
-        Zie Parser.Util line ?
-        matchStr s = match een bepaalde string en minstens een whitespace karakter 
-                     of commentaar.
-        \end{verbatim}
-        \begin{verbatim}
-        chainl1:
-        Zie Parser.Uitl line ?
-        chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
-        chainl1 p op = neemt 2 parsers binnen 1 gewone parser en 1 operator parser 
-                       en zal de operator parser met laagste prioriteit toepassen.
-        \end{verbatim}
+      
+      matchStr zorgt er voor dat commentaar en whitespace zo goed als automatisch geparsed wordt. Hierdoor moet er minder rekening gehouden worden met whitespace en commentaar tijdens de rest van het programma. 
+        \begin{lstlisting}
+    matchStr:
+    Zie Parser.Util line 69
+    matchStr :: String -> Parser String
+    matchStr s = match een bepaalde string en minstens een whitespace karakter 
+                 of commentaar.
+        \end{lstlisting}
+        
+    chainl1 is een functie die het implementeren van volgorde van bewerkingen met binaire operators enorm vergemakkelijkt.  
+        \begin{lstlisting}
+    chainl1:
+    Zie Parser.Uitl line 110
+    chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
+    chainl1 p op = neemt 2 parsers binnen 1 gewone parser en 1 operator parser 
+                   en zal de operator parser met laagste prioriteit toepassen.
+        \end{lstlisting}
     \subsubsection{NumericalParser.hs/BooleanParser.h/StatementParser.hs}
     Hier staan alle taal parsers. Deze brengen echter weinig nieuwigheden en
-    combineren gewoon parsers uit base of util om aan hun speciefieke resultaat te komen.
-
-
-
-
+    combineren gewoon parsers met mplus, <|> en chain 
+    uit base of util om aan hun speciefieke resultaat te komen.
 
   \subsection{Evalueren}
     Bij het evalueren wordt er gebruik gemaakt van een StateT monad transformer waarin een IO monad zit.
     Hierdoor kunnen we bij het evalueren statefull werken. Deze State zal de variabelen mappen naar waarden,
-    Zodat we later de waardes van variabelen kunnen opvragen.
+    zodat we later de waardes van variabelen kunnen opvragen.
     De State zal ook return waardes van expressies teruggeven.
     
     \subsubsection{NumericEval.hs / BoolEval.hs}
       Het idee hierbij is te pattern matchen op de datastructuur. Op deze manier kunnen we elk geval apart behandelen.
       Voor functies die veel voorkomen wordt een abstractere versie aangemaakt in Evaluator.Util.hs.
-      Een mooi voorbeeld hiervan is de functie EvalBOp zie Evaluator.Util.hs line ?.
+      Een mooi voorbeeld hiervan is de functie EvalBOp zie Evaluator.Util.hs line 8.
       EvalBOp is een functie die 6 argumenten neemt.
       \begin{enumerate}
         \item Functie die 2 a's binnen neemt en een a teruggeeft
@@ -272,84 +324,79 @@ Korte beschrijvingen van het programma.
       Vervolgens zal deze de return waarden daarvan uitpakken en tenslotte
       de functie erop toepassen en als laatste deze terug wrappen en in een MyState steken.
       
+      
     \subsubsection{StatementEval.hs}
     De StatementEval werkt op dezelfde manier als NumericEval en BoolEval.
     Maar bij het evalueren moet in onze statemonad aan IO gedaan worden.
     Dit omdat we met onze robot/standaardout willen kunnen communiceren.
-    De functies evalInput'(line ?), evalPrint (line ? ), evalRobotFunction (line ?) maken om dit te kunnen doen gebruik van liftIO.
+    De functies evalInput'(line 47), evalPrint (line 50 ), evalRobotFunction (line 56) maken om dit te kunnen doen gebruik van liftIO.
   \subsection{RobotLib}
     \subsubsection{Robot.Base.hs}
     Hier werd verder gewerkt op de gegeven library zodat er intuïtiever gewerkt kan worden met de MBot
     En zodat er een mooie scheiding kan blijven bestaan tussen de robotaansturing en de taal Alphi.
-    Een Interessante functie is de move functie. Hierbij wordt een device, snelheid en motor meegegeven
+    Een interessante functie is de move functie. Hierbij wordt een device, snelheid en motor meegegeven
     zodat de motor makkelijker kan aangestuurd worden.
-    De Implementatie kan gevonden worden onder Robot.Base.hs line ? .
+    De Implementatie kan gevonden worden onder Robot.Base.hs line 23.
 
 \section{Mogelijke Verbeteringen}
   \subsection{Taalaspecten} 
-    Het gebruik van enkel alphanumerical karakters is niet aangeraden.
+  Het gebruik van enkel alphanumerical karakters is niet aangeraden.
   Het is zowel voor de leesbaarheid als voor de moeilijkheid van het parsen beter om wel gebruik te maken van speciale karakters.
-  Verder zou het leuk zijn moest de taal werkelijk statisch zijn. In de plaats van voor elke identifier een ID te zetten zoals N(Numerical) of B(Boolean).
-  Dit kan gebeuren door tijdens het parsen ook een state van een environment bij te houden waarin elke variable gemapped zou worden op het type.
-  Er zijn nog enkele kleine aspecten die de programmeertaal niet helemaal statisch maken zoals numerical expressions die kunnen staan als boolean in If/While Statement.
+  Verder zou het leuk zijn moest de taal werkelijk statisch zijn. In de plaats van voor elke type variable een ID te zetten zoals N (Numerical) of B (Boolean).
+  Dit kan gebeuren door tijdens het parsen ook een state van een environment bij te houden waarin elke variable gemapped zou worden op het type dat ze op dat moment zijn.
+  Er zijn nog enkele kleine aspecten die de programmeertaal niet helemaal statisch maken zoals numerical expressions die kunnen staan als boolean in If/While Statement Deze worden dan at runtime opgelost door een error te smijten.
   Ook zou het leuk zijn moesten integers niet achterliggend worden geconverteerd naar doubles zoals nu het geval is.
   Als laatste Verbetering zouden multiple parameters voor bijvoorbeeld het aansturen van de leds van de robot ook handig zijn.
 
   \subsection{Programmeeraspecten} 
   In de programmeertaal zit in de implementatie van de volgorde van bewerkingen werkelijk ook volgorde van bewerkingen.
   Wat ik hiermee bedoel is dat het omwisselen van 2 parsers hier er voor kan zorgen dat heel de parser niet meer werkt.
-  Dit komt omdat er gebruik wordt gemaakt van de chain bewerking en mplus bewerking om de parsers te combineren. Het omwisselen van 2  parsers kan hierbij echter werkelijk heel de parser breken helpen. Hierdoor zou het misschien beter zijn de manier waarop de volgorde van bewerkingen gedaan wordt te herzien en robuuster te schrijven.
+  Dit komt omdat er gebruik wordt gemaakt van de chain bewerking en mplus bewerking om de parsers te combineren. Het omwisselen van 2  parsers kan hierbij echter werkelijk heel de parser breken helpen. Hierdoor zou het misschien beter zijn de manier waarop de  volgorde van bewerkingen gedaan wordt te herzien en robuuster te schrijven.
 
 
 \section{Conclusie}
-
-  \subsection{Algemeen}
- Een alphanumerical taal maken leek in het begin leuk. Dit bracht echter enkele nadelen met zich mee.
-Het grote nadeel hierbij is dat je geen speciale karakters hebt die kunnen instaan voor bijvoorbeeld het einde van een statement, haakjes etc.
+De Taal Alphi ondersteunt 2 Datatypes namelijk Booleans en Numericals. Hiermee kunnen Expressies gevormd worden.
+In deze expressies wordt een minimale vorm van volgorde van bewerkingen ondersteund.
+Verder is het ook mogelijk om toekenningen aan variabelen te doen. Er werden ook 2 controlestatements gemaakt namelijk de While en de If zodat op bepaalde voorwaarden een ander deel van de  code uitgevoerd kan worden. Als laatste werd er ook nog support voor communicatie met een MBot voorzien. Hiervoor werden een aantal basiscommando's voorzien. Zoals OpenMBot, CloseMbot, MotorL,etc.
+ Een alphanumerical taal maken leek in het begin een goed idee. Dit bracht echter enkele nadelen met zich mee.
+Het grootste nadeel hierbij is dat je geen speciale karakters hebt die kunnen instaan voor bijvoorbeeld het einde van een statement, haakjes etc.
 Verder wordt de taal ook enorm rap onduidelijk en onleesbaar doordat er weinig tot geen onderscheid gemaakt kan worden tussen keywords en Expressies of variabelen.
-
-  \subsection{Syntax definitie}
-Hierbij zijn er soms onlogische samenstellingen mogelijk zoals Numerical Expression in de IfConditie of WhileStatement
-Hierdoor moet dit opgevangen worden tijdens het evalueren. Dit is ongewild.
-
-  \subsection{Implementatie}
-De parseLibrary is vrij onduidelijk geschreven. Er onbreekt een mooie volgbare hierachie die bijvoorbeeld wel aanwezig is bij het evalueren.
+Bij de syntax definitie zijn er soms onlogische samenstellingen mogelijk zoals een Numerical Expression in de IfConditie of WhileStatement. Hier zouden duidelijk alleen booleans toegelaten mogen zijn. Hierdoor moet dit opgevangen worden tijdens het evalueren. Dit is ongewild. Verder is 
+de parseLibrary vrij onduidelijk geschreven. Er onbreekt een mooie volgbare hierachie die bijvoorbeeld wel aanwezig is bij het evalueren.
 Dit komt voornamelijk doordat er geen eenduidige manier is om dingen te parsen en er op ieder moment rekening met whitespace en commentaar gehouden moet worden.
-
+\newgeometry{top=2cm, bottom=2cm, left=1cm, right=1cm}
 \section{Appendix Broncode}
-  \newgeometry{left=1in}
   \subsection{AlphiExamples}
     \subsubsection{demo\_police.alp}
-      %\putmyhaskellhere{AlphiExamples}{demo_police.alp}
-      \lstinputlisting[style=numbered]{../AlphiExamples/demo_police.alp}
+      \lstinputlisting[language=Alphi, style=numbered]{../AlphiExamples/demo_police.alp}
     \subsubsection{demo\_line.alp}
-      \lstinputlisting[style=numbered]{../AlphiExamples/demo_line.alp}
+      \lstinputlisting[language=Alphi, style=numbered]{../AlphiExamples/demo_line.alp}
     \subsubsection{demo\_ultra.alp}
-      \lstinputlisting[style=numbered]{../AlphiExamples/demo_ultra.alp}
+      \lstinputlisting[language=Alphi, style=numbered]{../AlphiExamples/demo_ultra.alp}
   \subsection{SRC}
     \subsubsection{Main.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Main.hs}
+      \lstinputlisting[ style=numbered]{../Main.hs}
     \subsubsection{Parser.Base.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Parser/Base.hs}
+      \lstinputlisting[style=numbered]{../Parser/Base.hs}
     \subsubsection{Parser.NumericParser.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Parser/NumericParser.hs}
+      \lstinputlisting[style=numbered]{../Parser/NumericParser.hs}
     \subsubsection{Parser.BoolParser.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Parser/BoolParser.hs}
+      \lstinputlisting[style=numbered]{../Parser/BoolParser.hs}
     \subsubsection{Parser.StatementParser.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Parser/StatementParser.hs}
+      \lstinputlisting[style=numbered]{../Parser/StatementParser.hs}
     \subsubsection{Parser.Util.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Parser/Util.hs}
+      \lstinputlisting[style=numbered]{../Parser/Util.hs}
     \subsubsection{Evaluator.NumericEval.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Evaluator/NumericEval.hs}
+      \lstinputlisting[style=numbered]{../Evaluator/NumericEval.hs}
     \subsubsection{Evaluator.BoolEval.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Evaluator/BoolEval.hs}
+      \lstinputlisting[style=numbered]{../Evaluator/BoolEval.hs}
     \subsubsection{Evaluator.StatementEval.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Evaluator/StatementEval.hs}
+      \lstinputlisting[style=numbered]{../Evaluator/StatementEval.hs}
     \subsubsection{Evaluator.Util.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Evaluator/Util.hs}
+      \lstinputlisting[style=numbered]{../Evaluator/Util.hs}
     \subsubsection{Data.Base.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Data/Base.hs}
+      \lstinputlisting[style=numbered]{../Data/Base.hs}
     \subsubsection{Robot.Base.hs}
-      \lstinputlisting[language=Haskell, style=numbered]{../Robot/Base.hs}
+      \lstinputlisting[style=numbered]{../Robot/Base.hs}
   \restoregeometry
 \end{document}

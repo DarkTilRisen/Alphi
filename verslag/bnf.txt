@@ -1,10 +1,18 @@
-Pgm    ::= Stmt
+Pgm    ::= <Stmt>
+Bool   ::= "True" | "False"
+Num    ::=  <Int> | <Float>
+Int    ::= ["0"-"9"]+
+Float  ::= <Int>"Point"<Int>
+Var    ::= "NVar" | "BVar"
+NVar   ::= "N"<Letter>+
+BVar   ::= "B"<Letter>+
+Letter ::= ["a"-"Z"]
 
 Stmt   ::= <Var> "Is" <Exp> "Stop"
         |"Command" <Output> <Exp> "Stop"
         |<Stmt> <Stmt>
         | "If" <Exp> "Begin" <Stmt> "End"
-        | "While" <Exp> "Begin" Stmt "End"
+        | "While" <Exp> "Begin" <Stmt> "End"
 
 Exp    ::= <BExp>
         | <NExp>
@@ -39,12 +47,3 @@ Output ::= "Print"
         | "MotorL"
         | "Led1"
         | "Led2"
-
-Bool   ::= "True" | "False"
-Num    ::=  <Int> | <Float>
-Int    ::= ["0"-"9"]+
-Float  ::= <Int>"Point"<Int>
-Var    ::= "NVar" | "BVar"
-NVar   ::= "N"<Letter>+
-BVar   ::= "B"<Letter>+
-Letter ::= ["a"-"Z"]
