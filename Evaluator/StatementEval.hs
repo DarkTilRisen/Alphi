@@ -28,7 +28,7 @@ evalStatement :: Statement -> MyState
 evalStatement (ExpStatement e)   = evalExp e
 evalStatement (Statements s1 s2) = evalStatement s1 >> evalStatement s2
 evalStatement (If b s)           = evalStruct b s $ evalStatement s
-evalStatement (While b s)        = evalStruct b s $ evalStatement s >> evalStatement (While b s)
+evalStatement (While b s)        = evalStruct b s $ evalStatement s >> evalStatement (While b s)--evalStruct b s $ evalStatement s >> evalStatement (While b s)
 evalStatement (Assign s e)       = evalAssign s e
 evalStatement (Output t e)       = evalCommand t e
 evalStatement Empty              = return Void
