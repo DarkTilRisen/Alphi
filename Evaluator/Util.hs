@@ -14,7 +14,7 @@ evalBOp f x y e g c = do x' <- e x
 find ::(Eq a) => a -> [(a,b)] -> b
 find x env = fromMaybe (error varNotFound) (lookup x env)
 
-
+-- insert a value
 insertVar :: String -> a -> Env a -> Env a
 insertVar s a env =  (s,a):remove s env
   where remove s  = filter (\(s1,a) -> (s1 /= s))
